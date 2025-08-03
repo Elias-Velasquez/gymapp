@@ -1,0 +1,758 @@
+.text-color {
+  font-weight: 600 !important;
+  color: var(--custom-black);
+}
+
+// .text,
+// .text-light {
+//   color: rgb(var(--default-text-color)) !important;
+// }
+
+@media (max-width: 320px) {
+  .chat-content-custom-list {
+    padding-block-end: 5rem !important;
+  }
+}
+
+#btc-chart {
+
+  .apexcharts-svg,
+  .apexcharts-canvas {
+    width: 120px !important;
+  }
+}
+
+
+[data-menu-styles="transparent"][data-nav-layout="vertical"][data-nav-style=icon-hover][data-toggled=icon-hover-closed][data-theme-mode=light] {
+  .app-sidebar .main-sidebar-header .header-logo .desktop-logo {
+    display: none;
+  }
+
+  .app-sidebar .main-sidebar-header .header-logo .toggle-dark {
+    display: block;
+  }
+}
+
+
+// .landing-footer-list li {
+//   display: inline-block;
+//   padding: 0 12px;
+// }
+
+.custom-multiselect {
+  .multiselect {
+    width: 21%;
+  }
+  .multiselect__tags {
+    padding: 8px 31px 0 8px;
+  }
+}
+[dir="rtl"] {
+  .custom-multiselect {
+    .multiselect__tags {
+      padding: 8px 8px 0 31px;
+    }
+  }
+}
+
+.custom-table-select {
+
+  input,
+  select {
+    border: 1px solid var(--input-border);
+    color: var(--default-text-color);
+    background-color: var(--form-control-bg);
+    font-size: 0.875rem;
+    font-weight: var(--default-font-weight);
+    line-height: 1.5;
+    border-radius: 0.35rem;
+    padding: 5px 10px;
+    &:focus-visible {
+      outline: 0 !important;
+    }
+  }
+
+  .vue3-easy-data-table {
+    margin-block-start: 10px;
+  }
+}
+
+.custom-table-select input {
+  margin-block-start: 8px;
+}
+
+.custom-chart-class {
+
+  .apexcharts-menu-icon,
+  .apexcharts-pan-icon,
+  .apexcharts-reset-icon,
+  .apexcharts-selection-icon,
+  .apexcharts-toolbar-custom-icon,
+  .apexcharts-zoom-icon,
+  .apexcharts-zoomin-icon,
+  .apexcharts-zoomout-icon {
+    display: none;
+  }
+}
+
+// .apexcharts-menu-icon {
+//   display: none;
+// }
+
+@media (max-width: 320px) {
+  .custom-map-class {
+    margin-bottom: 10px;
+  }
+}
+
+.swal2-cancel {
+  margin-right: 5px;
+}
+
+[data-header-styles="light"] .main-header-container .country-selector .header-link {
+  color: #536485;
+}
+
+.header-product-item li.badge:last-child {
+  padding-inline-end: 0.45rem;
+  font-size: .625rem;
+  font-weight: 600;
+}
+
+.main-header-container .main-header-dropdown .dropdown-item {
+  border-block-end: 0;
+}
+
+body {
+  *::-webkit-scrollbar {
+    width: 2px;
+    height: .25rem;
+    -webkit-transition: all .05s ease;
+    transition: all .05s ease;
+    background: rgba(var(--light-rgb), .5);
+  }
+
+  *:hover::-webkit-scrollbar-thumb {
+    background: rgb(var(--light-rgb));
+    width: 2px;
+    height: .25rem;
+  }
+}
+
+[data-page-style="modern"][data-theme-mode="dark"] {
+  --input-border: rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 992px) {
+  [data-nav-style="menu-click"][data-nav-layout="horizontal"][data-theme-mode="dark"][data-header-styles="light"][data-menu-styles="light"] {
+    .app-header {
+      border-block-end: 1px solid #f3f3f3;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  [data-menu-styles="transparent"][data-nav-layout="vertical"][data-theme-mode="light"] {
+
+    &[data-nav-style="icon-click"][data-toggled="icon-click-closed"],
+    &[data-nav-style="icon-hover"][data-toggled="icon-hover-closed"],
+    &[data-vertical-style="overlay"][data-toggled="icon-overlay-close"] {
+      .app-sidebar .main-sidebar-header .header-logo {
+
+        .toggle-white,
+        .toggle-dark,
+        .desktop-logo,
+        .desktop-dark,
+        .desktop-white {
+          display: none;
+        }
+      }
+
+      .app-sidebar .main-sidebar-header .header-logo .toggle-logo {
+        display: block;
+      }
+    }
+  }
+}
+
+.color-primary-light,
+.color-bg-transparent {
+  .vc-color-wrap .current-color {
+    background: #845adf !important;
+  }
+}
+
+#buy-crypto,
+#sell-crypto {
+  .multiselect {
+    width: 5rem !important;
+
+    .multiselect__tags {
+      padding: 8px 30px 0 8px;
+    }
+  }
+}
+
+[dir="rtl"] {
+
+  #buy-crypto,
+  #sell-crypto {
+    .multiselect {
+      width: 5rem !important;
+
+      .multiselect__tags {
+        padding: 8px 8px 0 30px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 1400px) {
+  .main-chart-wrapper .chat-user-details.open {
+    max-height: calc(100vh - 14.7rem);
+  }
+}
+
+.invoice-currency-dropdown {
+  .multiselect {
+    background-color: rgb(var(--light-rgb)) !important;
+  }
+
+  .multiselect__input {
+    background: rgb(var(--light-rgb)) !important;
+  }
+}
+
+.invoice-input .dp__main {
+  background-color: rgb(var(--light-rgb)) !important;
+  border-radius: 0.5rem !important;
+}
+
+.v-btn__overlay,
+.v-ripple__animation {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+.vue-slider-dot-handle {
+  background-color: var(--custom-white) !important;
+}
+
+[data-theme-mode="dark"] {
+  .vue-slider-dot-handle {
+    box-shadow: 0px 0px 3px 1px rgb(255 255 255 / 17%) !important;
+  }
+}
+
+.dp--qr-btn {
+  color: var(--default-text-color);
+}
+
+.v-text-field .v-field--no-label input,
+.v-text-field .v-field--active input {
+  background: transparent;
+  border: 0;
+}
+
+.v-select .v-field .v-field__input>input {
+  border: 0;
+  background: transparent;
+}
+
+.v-list-item--variant-text .v-list-item__overlay {
+  background: rgba(var(--light-rgb), .35) !important;
+  color: var(--default-text-color) !important;
+}
+
+.jvm-zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+}
+
+#users-map , #marker-map, #marker-image-map, #lines-map, #vector-map {
+  .jvm-zoom-btn.jvm-zoomin {
+    top: 8px;
+  }
+}
+
+.fc-theme-standard .fc-popover {
+  background: var(--custom-white) !important;
+  border: 1px solid var(--default-border) !important;
+}
+
+.input-group-date-custom {
+  .v3dp__datepicker {
+    flex: 1 1 auto;
+  }
+}
+
+[data-theme-mode="dark"] {
+  .v-tooltip {
+    .btn-dark {
+      border: 0px !important;
+    }
+  }
+}
+
+[dir="ltr"] {
+  .vue3-easy-data-table__main.border-cell .vue3-easy-data-table__body td {
+    border-right: 1px solid var(--default-border) !important;
+  }
+
+  .vue3-easy-data-table__main.border-cell .vue3-easy-data-table__body td[data-v-32683533]:last-of-type {
+    border-right: none !important;
+  }
+
+  .vue3-easy-data-table__main {
+    tr {
+
+      td,
+      th {
+        border-right: 1px solid var(--default-border) !important;
+
+        &:last-of-type {
+          border-right: none !important;
+        }
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+  .vue3-easy-data-table__main.border-cell .vue3-easy-data-table__body td {
+    border-left: 1px solid var(--default-border) !important;
+  }
+
+  .vue3-easy-data-table__main.border-cell .vue3-easy-data-table__body td[data-v-32683533]:last-of-type {
+    border-left: none !important;
+  }
+
+  .vue3-easy-data-table__main {
+    tr {
+
+      td,
+      th {
+        border-left: 1px solid var(--default-border) !important;
+
+        &:last-of-type {
+          border-left: none !important;
+        }
+      }
+    }
+  }
+}
+
+.invoice-currency-dropdown {
+  .multiselect {
+    background-color: rgb(var(--light-rgb)) !important;
+  }
+
+  .multiselect__input {
+    background: rgb(var(--light-rgb)) !important;
+  }
+}
+
+.invoice-input .dp__main {
+  background-color: rgb(var(--light-rgb)) !important;
+  border-radius: 0.5rem !important;
+}
+
+.dp__outer_menu_wrap {
+  left: -12px;
+}
+
+#crm-revenue-analytics .apexcharts-title-text {
+  transform: translateY(0.625rem);
+}
+
+.user-card .main-img-user {
+  margin: 0 auto;
+}
+
+.MS-content .carousel__slide {
+  margin-inline-start: 0.5rem !important;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.carousel__slide {
+  margin-inline-start: 0.25rem !important;
+
+  .item {
+    width: 100%;
+  }
+}
+
+.carousel__icon {
+  fill: rgb(216 216 233);
+}
+
+#basicSlider {
+  .carousel__icon {
+    fill: #fff !important;
+  }
+}
+
+#alttext-image {
+  display: none;
+}
+
+[dir="rtl"] {
+  .vue-star-rating {
+    .sr-only {
+      left: auto;
+    }
+  }
+}
+
+[dir="rtl"] {
+  .swal2-cancel {
+    margin-left: 5px;
+  }
+}
+
+[dir="rtl"] {
+  .popover-arrow {
+    display: block;
+  }
+}
+
+[dir="rtl"] {
+
+  #switch-lg,
+  #switch-md {
+    width: 2.5rem;
+  }
+}
+
+
+.link-opacity-card {
+  a {
+    color: rgba(var(--dark-rgb), var(--bs-link-opacity, 1)) !important;
+  }
+}
+
+.alert {
+  .btn-close {
+    --bs-btn-close-bg: none;
+  }
+}
+#subscriptionOverview, #nft-statistics {
+  padding-inline: 1rem;
+}
+#analytics-sessions {
+  margin-top: .5rem !important;
+  margin-bottom: .5rem !important;
+}
+.analytics-country-img {
+  margin-inline-end: 0 !important;
+}
+.projects-teamcard {
+  .flex-fill {
+    margin-inline-start: 0.25rem;
+  }
+}
+#hrm-jobs-summary {
+  padding-top: 0.9rem !important;
+  padding-bottom: 0.9rem !important;
+}
+[dir="rtl"] {
+  .dp__main * {
+    direction: rtl;
+  }
+}
+.order-track {
+  #basicAccordion3 {
+    .d-flex {
+      margin-bottom: .75rem !important;
+    }
+  }
+}
+.vue-slider-process {
+  background-color: rgb(var(--primary-rgb)) !important;
+}
+@media (max-width: 1200px) {
+  .landing-body .landing-main-image:before {
+    inset-inline-start: -1rem;
+  }
+}
+@media (max-width: 767.98px) {
+  .swiper-view-details.swiper-thumbs .swiper-slide img {
+      height: 100% !important;
+  }
+}
+.multiselect__option--highlight:after, .multiselect__option--selected::after {
+  display: none !important;
+}
+.invoice-input {
+  .dp__input_icon {
+    display: none;
+  }
+  .dp__pointer.dp__input_readonly {
+    padding-inline-start: 16px !important;
+  }
+}
+.landing-main-footer.landing-jobs-footer .landing-footer-list li {
+  display: inline-block;
+  padding: 0 12px;
+}
+.landing-jobs-form.form-control {
+  padding-inline-end: 9rem;
+}
+[dir="rtl"] {
+  .vc-color-wrap {
+    margin-left: 10px !important;
+    margin-right: 0 !important;
+  }
+}
+.blockquote-footer.text-fixed-white {
+  color: white !important;
+}
+.tooltip {
+  border-radius: 0.375rem;
+}
+.multiselect--disabled .multiselect__current, .multiselect--disabled .multiselect__select {
+  background: transparent !important;
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+.v3dp__datepicker-custom {
+  .v3dp__datepicker {
+    flex-grow: 1;
+  }
+}
+.v-input.v-input--horizontal {
+  margin-block-end: 4px;
+}
+@media (max-width: 460px) {
+  .custom-multiselect .multiselect {
+    width: 30%;
+  }
+}
+@media (min-width: 992px) {
+  [data-bg-img="bgimg1"], [data-bg-img="bgimg2"], [data-bg-img="bgimg3"], [data-bg-img="bgimg4"], [data-bg-img="bgimg5"] {
+    &[data-nav-layout=horizontal] .app-sidebar {
+      border-block-end: 0;
+    }
+  }
+}
+[data-header-styles=dark] .main-header-container .country-selector .header-link {
+  color: #fff;
+}
+.v-input__details {
+  min-height: 0 !important;
+  padding-block-end: 0 !important;
+}
+.custom-map {
+  .leaflet-marker-pane{
+      img {
+          display: none;
+      }
+  }
+}
+[data-nav-layout=vertical] .slide.has-sub>.side-menu__item {
+  margin-block: .25rem;
+}
+[dir="rtl"] {
+  .vue3-easy-data-table__body td .expand-icon {
+      transform: rotate(135deg);
+  }
+}
+// .apexcharts-line-series.apexcharts-plot-series {
+//     path {
+//         stroke: rgba(73, 182, 245, 0.85) !important;
+//     }
+// }
+#lines-map #jvm-regions-group path, #marker-image-map #jvm-regions-group path, #marker-map #jvm-regions-group path, #users-map #jvm-regions-group path, #vector-map #jvm-regions-group path, #visitors-countries #jvm-regions-group path {
+  fill: rgb(var(--light-rgb)) !important;
+}
+.apexcharts-yaxistooltip-left:after {
+  border-left-color: var(--default-border) !important;
+}
+.apexcharts-yaxistooltip-left:before {
+  border-left-color: var(--default-border) !important;
+}
+.apexcharts-xaxistooltip-bottom:before,
+.apexcharts-xaxistooltip-bottom:after {
+  border-bottom-color: var(--default-border) !important;
+}
+.blockquote-footer {
+  color: var(--default-text-color) !important;
+}
+.multiselect__option--highlight {
+  color: white !important;
+  background-color: var(--primary-color) !important;
+}
+.multiselect__placeholder {
+  font-size: .813rem !important;
+}
+a {
+  color: rgba(var(--dark-rgb), var(--bs-link-opacity, 1));
+}
+.v3dp__popout {
+  margin-block-start: -1px;
+  box-shadow: 0 .125rem 0 rgba(10, 10, 10, .04) !important;
+}
+[data-theme-mode=dark] .bg-light, [data-theme-mode=dark] .card-bg-light {
+  color: var(--custom-black) !important;
+}
+.card.custom-card .card-header.terms-conditions-header-section .card-title:before {
+  display: none;
+}
+a.link-underline {
+  text-decoration-color: rgba(var(--dark-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a:hover {
+  opacity: 1;
+  color: rgba(var(--dark-rgb), var(--bs-link-opacity, 1));
+}
+a.link-underline-primary {
+  text-decoration-color: rgba(var(--primary-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-secondary {
+  text-decoration-color: rgba(var(--secondary-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-success {
+  text-decoration-color: rgba(var(--success-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-danger {
+  text-decoration-color: rgba(var(--danger-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-warning {
+  text-decoration-color: rgba(var(--warning-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-info {
+  text-decoration-color: rgba(var(--info-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-light {
+  text-decoration-color: rgba(var(--light-rgb), var(--bs-link-underline-opacity)) !important;
+}
+a.link-underline-dark {
+  text-decoration-color: rgba(var(--dark-rgb), var(--bs-link-underline-opacity)) !important;
+}
+.Toastify__toast-theme--colored.Toastify__toast--default, .Toastify__toast-theme--light {
+  background: var(--custom-white) !important;
+  color: var(--default-text-color) !important;
+}
+.bg-success.bg-opacity-25 {
+  color: #000 !important
+}
+.bg-success.bg-opacity-50 {
+  color: #000 !important
+}
+.bg-success.bg-opacity-10 {
+  color: #000 !important
+}
+.focus-ring:focus {
+  --bs-focus-ring-color: rgba(var(--primary-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-secondary:focus {
+  --bs-focus-ring-color: rgba(var(--secondary-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-success:focus {
+  --bs-focus-ring-color: rgba(var(--success-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-info:focus {
+  --bs-focus-ring-color: rgba(var(--info-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-warning:focus {
+  --bs-focus-ring-color: rgba(var(--warning-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-danger:focus {
+  --bs-focus-ring-color: rgba(var(--danger-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-light:focus {
+  --bs-focus-ring-color: rgba(var(--light-rgb), var(--bs-focus-ring-opacity));
+}
+.focus-ring.focus-ring-dark:focus {
+  --bs-focus-ring-color: rgba(var(--dark-rgb), var(--bs-focus-ring-opacity));
+}
+.mySwiper .swiper-slide.swiper-slide-thumb-active {
+  opacity: 1;
+}
+.mySwiper .swiper-slide {
+  opacity: 0.4;
+}
+.recent-applicants .apexcharts-series-markers.apexcharts-series-bubble {
+  path {
+      stroke: transparent !important;
+  }
+}
+.multiselect__tag {
+  font-size: 0.75rem;
+}
+.multiselect__tag-icon {
+  top: -2px;
+}
+
+#users-map circle:nth-child(1) {
+fill: #28d193;
+}
+#users-map circle:nth-child(2) {
+fill: #ff8c33;
+}
+#users-map circle:nth-child(3) {
+fill: #ff534d;
+}
+#users-map circle:nth-child(4) {
+fill: #ffbe14;
+}
+#users-map circle:nth-child(5) {
+fill: #4b9bfa;
+}
+#marker-map circle:nth-child(1) {
+fill: #5c5cff;
+}
+#marker-map circle:nth-child(2) {
+fill: #ff9251;
+}
+#marker-map circle:nth-child(3) {
+fill: #56de80;
+}
+#marker-map circle:nth-child(4) {
+fill: yellow;
+}
+#marker-map circle:nth-child(5) {
+fill: #000;
+}
+.polar-area-charts{
+  .apexcharts-pie text {
+      fill: var(--default-text-color);
+  }
+}
+#bubble-3d {
+  .apexcharts-zoomout-icon,.apexcharts-zoomin-icon {
+      display: none;
+  }
+}
+
+#candlestick-line {
+  .apexcharts-line-series{
+      .apexcharts-series{
+          path{
+              stroke:#49b6f5 !important;
+          }
+      }
+  }
+}
+
+#particles-js {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+.landing-testimonials {
+  
+
+.swiper-pagination-bullet {
+  transform: scale(.33);
+  position: relative;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  transform: scale(.66);
+}
+}

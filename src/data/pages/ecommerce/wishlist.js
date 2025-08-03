@@ -1,0 +1,28 @@
+import ecommerce1 from '/images/ecommerce/png/1.png';
+import ecommerce2 from '/images/ecommerce/png/2.png';
+import ecommerce3 from '/images/ecommerce/png/3.png';
+import ecommerce4 from '/images/ecommerce/png/4.png';
+import ecommerce8 from '/images/ecommerce/png/8.png';
+import ecommerce9 from '/images/ecommerce/png/9.png';
+import ecommerce11 from '/images/ecommerce/png/11.png';
+import ecommerce12 from '/images/ecommerce/png/12.png';
+import ecommerce13 from '/images/ecommerce/png/13.png';
+import ecommerce15 from '/images/ecommerce/png/15.png';
+import ecommerce16 from '/images/ecommerce/png/16.png';
+import ecommerce23 from '/images/ecommerce/png/23.png';
+
+export let
+    wishList = [
+        { id: 1, image: ecommerce1, title: 'Dapzem & Co', description: 'Branded hoodie ethnic style', actualPrice: '1799', price: '229', badge: '72% off', badgeClass: 'bg-secondary-transparent', rating: "4.2", category: ['clothing'], stock: '283', gender: 'Male', seller: 'Apilla.co.in', published: '24,Nov 2022 - 04:42PM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 2, image: ecommerce2, title: 'Denim Winjo', description: 'Vintage pure leather Jacket', actualPrice: '2499', price: '599', badge: '75% off', badgeClass: 'bg-secondary-transparent', rating: "4", category: ['Clothing'], stock: '98', gender: 'Male', seller: 'Donzo Company', published: '18,Nov 2022 - 06:53AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 3, image: ecommerce3, title: 'Winter Coat For Women', description: 'Unisex jacket for men & women', actualPrice: '299', price: '189', badge: '50% off', badgeClass: 'bg-primary-transparent', rating: "3.6", category: ['Clothing'], stock: '322', gender: 'Female', seller: 'WoodHill.co.in', published: '16,Oct 2022 - 12:45AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 4, image: ecommerce4, title: 'Bluberry Co.In', description: 'Full sleeve white hoodie', actualPrice: '2,699', price: '2,499', badge: '10% off', badgeClass: 'bg-secondary-transparent', rating: "4.6", category: ['Clothing'], stock: '194', gender: 'Male,Female', seller: 'Watches.co.in', published: '12,Aug 2022 - 11:21AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 5, image: ecommerce15, title: 'Orange Smart Watch', description: 'Ergonic designed full sleeve coat', actualPrice: '999', price: '349', badge: '40% off', badgeClass: 'bg-secondary-transparent', rating: "4.3", category: ['Watches'], stock: '1293', gender: 'Male,Female', seller: 'SlowTrack Company', published: '21,Oct 2022 - 11:36AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 6, image: ecommerce13, title: 'Watch series (44mm)', description: 'Flap pockets denim jackets for men', actualPrice: '1800', price: '899', badge: '50% off', badgeClass: 'bg-primary-transparent', rating: "3.4", category: ['Watches'], stock: '267', gender: 'Male,Female', seller: 'Watches.co.in', published: '05,Sep 2022 - 10:14AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 7, image: ecommerce16, title: 'Ikonic Smart Watch(40mm)', description: 'Ethnic wear jackets form BMW', actualPrice: '1499', price: '999', badge: '30% off', badgeClass: 'bg-primary-transparent', rating: "4.3", category: ['Watches'], stock: '365', gender: 'Female', seller: 'Kohino.zaps.com', published: '27,Nov 2022 - 05:12AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 8, image: ecommerce23, title: 'Apple Watch Series 5', description: 'Snow jacket with low pockets', actualPrice: '2099', price: '1499', badge: '20% off', badgeClass: 'bg-secondary-transparent', rating: "4.8", category: ['Watches'], stock: '257', gender: 'Male,Female', seller: 'Apple Corporation', published: '29,Nov 2022 - 16:32PM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 9, image: ecommerce12, title: 'Sweater For Women', description: 'Light colored sweater from blueberry', actualPrice: '599', price: '499', badge: '10% off', badgeClass: 'bg-secondary-transparent', rating: "3.5", category: ['Clothing'], stock: '143', gender: 'Female', seller: 'Louie Philippe', published: '18,Nov 2022 - 14:35PM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 10, image: ecommerce8, title: 'Pufa', description: 'Full sleeve sweat shirt', actualPrice: '5699', price: '2399', badge: '72% off', badgeClass: 'bg-primary-transparent', rating: "4", category: ['Clothing'], stock: '375', gender: 'Male,Female', seller: 'SlowTrack ', published: '21,Oct 2022 - 11:36AM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 11, image: ecommerce11, title: 'Garage & Co', description: 'Beautiful brown colored snow jacket', actualPrice: '1299', price: '249', badge: '70% off', badgeClass: 'bg-primary-transparent', rating: "4", category: ['Clothing'], stock: '145', gender: 'Male,Female', seller: 'WoodHill', published: '24,Nov 2022 - 04:42PM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+        { id: 12, image: ecommerce9, title: 'Louie Phillippe', description: 'Ergonic green colored full sleeve jacket', actualPrice: '3299', price: '1899', badge: '60% off', badgeClass: 'bg-secondary-transparent', rating: "4", category: ['Clothing'], stock: '214', gender: 'Male,Female', seller: 'Donzo', published: '18,Nov 2022 - 14:35PM', icons: [{ iconClass: "wishlist btn-delete", icon: "close" }] },
+    ];
