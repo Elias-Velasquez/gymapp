@@ -2,25 +2,51 @@
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/swiper-bundle.css";
 import { Navigation, Pagination, Keyboard } from 'swiper/modules';
+// Update the import path if your auth store is located elsewhere, for example:
+import { useAuthStore } from "../../../stores/auth";
+// Or, if you are using Pinia and the store is named 'auth.ts' in 'src/stores', ensure the file exists at 'src/stores/auth.ts'
+import { useRouter } from 'vue-router';
 
 export default {
     components: {
         Swiper,
         SwiperSlide,
     },
-    setup() { return { modules: [Navigation, Pagination, Keyboard] } },
+    setup() { 
+        return { modules: [Navigation, Pagination, Keyboard] } 
+        },
+    computed: {
+            auth() {
+                return useAuthStore();
+            },
+        },
     data() {
         return {
             showPassword: false,
+            username: '',
+            password: ''
         }
     },
     methods: {
         togglePassword() {
             this.showPassword = !this.showPassword;
+        },
+        async handleLogin() {
+            await this.auth.login(this.username, this.password);
+            if (this.auth.token) {
+                this.router.push('/dashboard/crm');
+            } else if (this.auth.error) {
+                
+            }
         }
     },
     mounted() {
+        this.router = useRouter();
         document.body.classList.add('bg-white');
+         const token = localStorage.getItem('token');
+        if (token) {
+            this.router.push('/dashboard/crm');
+        }
     },
     unmounted() {
         document.body.classList.remove('bg-white');
@@ -34,72 +60,63 @@ export default {
             <div class="row justify-content-center align-items-center h-100">
                 <div class="col-xxl-6 col-xl-7 col-lg-7 col-md-7 col-sm-8 col-12">
                     <div class="p-5">
-                        <div class="mb-3">
-                            <router-link to='/dashboard/crm'>
-                                <img src="/images/brand-logos/desktop-logo.png" alt=""
-                                    class="authentication-brand desktop-logo">
-                                <img src="/images/brand-logos/desktop-dark.png" alt=""
-                                    class="authentication-brand desktop-dark">
-                            </router-link>
-                        </div>
-                        <p class="h5 fw-semibold mb-2">Sign In</p>
-                        <p class="mb-3 text-muted op-7 fw-normal">Welcome back Jhon !</p>
-                        <div class="btn-list">
-                            <button class="btn btn-light"><svg class="google-svg" xmlns="http://www.w3.org/2000/svg"
-                                    width="2443" height="2500" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
-                                    <path fill="#4285F4"
-                                        d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" />
-                                    <path fill="#34A853"
-                                        d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" />
-                                    <path fill="#FBBC05"
-                                        d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" />
-                                    <path fill="#EB4335"
-                                        d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" />
-                                </svg>Sign In with google</button>
-                            <button class="btn btn-icon btn-light"><i class="ri-facebook-fill"></i></button>
-                            <button class="btn btn-icon btn-light"><i class="ri-twitter-x-fill"></i></button>
-                        </div>
-                        <div class="text-center my-5 authentication-barrier">
-                            <span>OR</span>
-                        </div>
+                         <div class="row gy-3">
+                            <div class="col-12">
+                                <img src="../../../../assets/gym-logo.png" width="160" class="mb-3 authentication-logo d-block mx-auto" alt="">
+                            </div>
+                            </div>
+                        <p class="h5 mb-4 fw-semibold mb-2">Iniciar Sesión</p>
+                        
+                       
                         <div class="row gy-3">
+
+                            <div v-if="auth.error != null" class="alert alert-danger d-flex align-items-center" role="alert">
+                                <svg class="flex-shrink-0 me-2 svg-danger" xmlns="http://www.w3.org/2000/svg"
+                                    enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
+                                    <g>
+                                        <rect fill="none" height="24" width="24" />
+                                    </g>
+                                    <g>
+                                        <g>
+                                            <g>
+                                                <path
+                                                    d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z" />
+                                                <rect height="6" width="2" x="11" y="7" />
+                                                <rect height="2" width="2" x="11" y="15" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <div>
+                                    {{ auth.error }}
+                                </div>
+                            </div>
+
                             <div class="col-xl-12 mt-0">
-                                <label for="signin-username" class="form-label text-default">User Name</label>
-                                <input type="text" class="form-control form-control-lg" id="signin-username"
-                                    placeholder="user name">
+                                <label for="signin-username" class="form-label text-default">Nombre de Usuario</label>
+                                <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="usuario" v-model="username">
                             </div>
                             <div class="col-xl-12 mb-3">
                                 <label for="signin-password"
-                                    class="form-label text-default d-block">Password<router-link
-                                        to="/authentication/reset-password/cover" class="float-end text-danger">Forget
-                                        password
-                                        ?</router-link></label>
+                                    class="form-label text-default d-block">Contraseña</label>
                                 <div class="input-group">
-                                    <input :type="showPassword ? 'text' : 'password'"
-                                        class="form-control form-control-lg" id="signin-password"
-                                        placeholder="password">
+                                    <input :type="showPassword ? 'text' : 'password'" class="form-control form-control-lg" id="signin-password" placeholder="contraseña" v-model="password">
+
                                     <button class="btn btn-light" type="button" @click="togglePassword"
                                         id="button-addon2">
                                         <i :class="showPassword ? 'ri-eye-line' : 'ri-eye-off-line'"
                                             class="align-middle"></i>
                                     </button>
                                 </div>
-                                <div class="mt-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                        <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
-                                            Remember password ?
-                                        </label>
-                                    </div>
-                                </div>
+                               
                             </div>
                             <div class="col-xl-12 d-grid mt-2">
-                                <router-link to='/dashboard/crm' class="btn btn-lg btn-primary">Sign In</router-link>
+                                <button class="btn btn-lg btn-primary" @click="handleLogin">Acceder</button>
                             </div>
                         </div>
                         <div class="text-center">
-                            <p class="fs-12 text-muted mt-4">Dont have an account ? <router-link
-                                    to="/authentication/sign-up/cover" class="text-primary">Sign Up</router-link></p>
+                            <p class="fs-12 text-muted mt-4">¿No tienes una cuenta? <router-link
+                                    to="/authentication/sign-up/cover" class="text-primary">Registrarse</router-link></p>
                         </div>
                     </div>
                 </div>
@@ -115,13 +132,10 @@ export default {
                                 class="text-fixed-white text-center p-5 d-flex align-items-center justify-content-center">
                                 <div>
                                     <div class="mb-5">
-                                        <img src="/images/authentication/2.png" class="authentication-image" alt="">
+                                        <img src="../../../../assets/images.png" class="authentication-image" alt="">
                                     </div>
-                                    <h6 class="fw-semibold text-fixed-white">Sign In</h6>
-                                    <p class="fw-normal fs-14 op-7"> Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elit. Ipsa eligendi expedita aliquam quaerat nulla voluptas facilis. Porro rem
-                                        voluptates possimus, ad, autem quae culpa architecto, quam labore blanditiis at
-                                        ratione.</p>
+                                    <h6 class="fw-semibold text-fixed-white">Inicia</h6>
+                                    <p class="fw-normal fs-14 op-7"> Ingresa en nuestro sistema y explora nuestro servicio.</p>
                                 </div>
                             </div>
                         </swiper-slide>
@@ -130,13 +144,10 @@ export default {
                                 class="text-fixed-white text-center p-5 d-flex align-items-center justify-content-center">
                                 <div>
                                     <div class="mb-5">
-                                        <img src="/images/authentication/3.png" class="authentication-image" alt="">
+                                        <img src="../../../../assets/images (1).png" class="authentication-image" alt="">
                                     </div>
-                                    <h6 class="fw-semibold text-fixed-white">Sign In</h6>
-                                    <p class="fw-normal fs-14 op-7"> Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elit. Ipsa eligendi expedita aliquam quaerat nulla voluptas facilis. Porro rem
-                                        voluptates possimus, ad, autem quae culpa architecto, quam labore blanditiis at
-                                        ratione.</p>
+                                    <h6 class="fw-semibold text-fixed-white">Consulta</h6>
+                                    <p class="fw-normal fs-14 op-7"> Revisa tus ejercicios y haz seguimiento de tu progreso.</p>
                                 </div>
                             </div>
                         </swiper-slide>
@@ -145,13 +156,10 @@ export default {
                                 class="text-fixed-white text-center p-5 d-flex align-items-center justify-content-center">
                                 <div>
                                     <div class="mb-5">
-                                        <img src="/images/authentication/2.png" class="authentication-image" alt="">
+                                        <img src="../../../../assets/images2.avif" class="authentication-image" alt="">
                                     </div>
-                                    <h6 class="fw-semibold text-fixed-white">Sign In</h6>
-                                    <p class="fw-normal fs-14 op-7"> Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elit. Ipsa eligendi expedita aliquam quaerat nulla voluptas facilis. Porro rem
-                                        voluptates possimus, ad, autem quae culpa architecto, quam labore blanditiis at
-                                        ratione.</p>
+                                    <h6 class="fw-semibold text-fixed-white">Personaliza</h6>
+                                    <p class="fw-normal fs-14 op-7"> Modifica tus datos y planes de manera que obtengas la atención mas acorde a ti.</p>
                                 </div>
                             </div>
                         </swiper-slide>

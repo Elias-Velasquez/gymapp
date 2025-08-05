@@ -49,15 +49,15 @@
 
                 <!-- Start::header-element -->
                 
-                <div class="header-element country-selector">
-                        <!-- Start::header-link|dropdown-toggle -->
+                <!-- <div class="header-element country-selector">
+                        Start::header-link|dropdown-toggle
                         <div class="header-element country-selector"> 
                             <a href="javascript:void(0);" class="header-link" data-bs-toggle="modal" data-bs-target="#countryModal"> 
                                 <img src="/images/flags/us_flag.jpg" alt="img" class="rounded-circle header-link-icon"> 
                                 <span class="fw-semibold mb-0 lh-1">EN</span> 
                             </a> 
                         </div>
-                </div>
+                </div> -->
                 <!-- End::header-element -->
 
                 <!-- Start::header-element -->
@@ -82,13 +82,13 @@
                 <!-- Start::header-element -->
                 <div class="header-element cart-dropdown">
                     <!-- Start::header-link|dropdown-toggle -->
-                    <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
+                    <!-- <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
                         <i class="bx bx-cart header-link-icon"></i>
                         <span class="badge bg-primary rounded-pill header-icon-badge" id="cart-icon-badge">{{cartList.length}}</span>
-                    </a>
+                    </a> -->
                     <!-- End::header-link|dropdown-toggle -->
                     <!-- Start::main-header-dropdown -->
-                    <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
+                    <!-- <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
                         <div class="p-3">
                             <div class="d-flex align-items-center justify-content-between">
                                 <p class="mb-0 fs-17 fw-semibold">Cart Items</p>
@@ -134,7 +134,7 @@
                                 <router-link to="/pages/ecommerce/products" class="btn btn-primary btn-wave btn-sm m-1" data-abc="true">continue shopping <i class="bi bi-arrow-right ms-1"></i></router-link>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- End::main-header-dropdown -->
                 </div>
                 <!-- End::header-element -->
@@ -197,11 +197,11 @@
                 <!-- Start::header-element -->
                 <div class="header-element header-shortcuts-dropdown">
                     <!-- Start::header-link|dropdown-toggle -->
-                    <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="notificationDropdown" aria-expanded="false">
+                    <!-- <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="notificationDropdown" aria-expanded="false">
                         <i class="bx bx-grid-alt header-link-icon"></i>
                     </a>
-                    <!-- End::header-link|dropdown-toggle -->
-                    <!-- Start::main-header-dropdown -->
+                    End::header-link|dropdown-toggle 
+                    Start::main-header-dropdown
                     <div class="main-header-dropdown header-shortcuts-dropdown dropdown-menu pb-0 dropdown-menu-end" aria-labelledby="notificationDropdown">
                         <div class="p-3">
                             <div class="d-flex align-items-center justify-content-between">
@@ -308,7 +308,7 @@
                                 <a href="javascript:void(0);" class="btn btn-primary">View All</a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- End::main-header-dropdown -->
                 </div>
                 <!-- End::header-element -->
@@ -332,32 +332,32 @@
                            <img src="/images/faces/9.jpg" alt="img" width="32" height="32" class="rounded-circle"> 
                         </div> 
                         <div class="d-sm-block d-none"> 
-                            <p class="fw-semibold mb-0 lh-1">Json Taylor</p>
-                            <span class="op-7 fw-normal d-block fs-11">Web Designer</span> 
+                            <p class="fw-semibold mb-0 lh-1">{{auth.user}}</p>
+                            <span class="op-7 fw-normal d-block fs-11">{{auth.role}}</span> 
                         </div> 
                     </div> 
                 </a> <!-- End::header-link|dropdown-toggle --> 
                 <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile" style=""> 
-                    <li><router-link class="dropdown-item d-flex" to="/pages/profile"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</router-link></li> 
-                    <li><router-link class="dropdown-item d-flex" to="/pages/email/mail-app"><i class="ti ti-inbox fs-18 me-2 op-7"></i>Inbox <span class="badge bg-success-transparent ms-auto">25</span></router-link></li> 
-                    <li><router-link class="dropdown-item d-flex border-block-end" to="/pages/to-do-list"><i class="ti ti-clipboard-check fs-18 me-2 op-7"></i>Task Manager</router-link></li> 
-                    <li><router-link class="dropdown-item d-flex" to="/pages/email/mail-settings"><i class="ti ti-adjustments-horizontal fs-18 me-2 op-7"></i>Settings</router-link></li> 
-                    <li><router-link class="dropdown-item d-flex border-block-end" to="#"><i class="ti ti-wallet fs-18 me-2 op-7"></i>Bal: $7,12,950</router-link></li> 
-                    <li><router-link class="dropdown-item d-flex" to="/pages/chat"><i class="ti ti-headset fs-18 me-2 op-7"></i>Support</router-link></li> 
-                    <li><router-link class="dropdown-item d-flex"  to="/authentication/sign-in/basic"><i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out</router-link></li> 
+                    <li><router-link class="dropdown-item d-flex" to="/pages/profile"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Mi Perfil</router-link></li> 
+                     <li><router-link class="dropdown-item d-flex border-block-end" to="/pages/to-do-list"><i class="ti ti-clipboard-check fs-18 me-2 op-7"></i>Gestor de tareas</router-link></li> 
+                    <li><router-link class="dropdown-item d-flex" to="/pages/email/mail-settings"><i class="ti ti-adjustments-horizontal fs-18 me-2 op-7"></i>Configuración</router-link></li> 
+                    <li><a class="dropdown-item d-flex" href="javascript:void(0);" @click="handleLogout">
+                            <i class="ti ti-logout fs-18 me-2 op-7"></i>Salir
+                        </a>
+                    </li>
                 </ul> 
             </div>
 
                 <!-- End::header-element -->
 
                 <!-- Start::header-element -->
-                <div class="header-element">
-                    <!-- Start::header-link|switcher-icon -->
+                <!-- <div class="header-element">
+                    <!-- Start::header-link|switcher-icon 
                     <a href="javascript:void(0);" class="header-link switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                         <i class="bx bx-cog header-link-icon"></i>
                     </a>
-                    <!-- End::header-link|switcher-icon -->
-                </div>
+                     End::header-link|switcher-icon
+                </div> -->
                 <!-- End::header-element -->
 
             </div>
@@ -451,6 +451,7 @@
 import { switcherStore } from '../../../stores/switcher';
 import { notificationList, cartList, header } from '../../../data/headerdata.js';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from "../../../stores/auth";
 export default {
 
 
@@ -469,6 +470,11 @@ export default {
             colorthemeFn,
             logout
         }
+    },
+    computed: {
+        auth() {
+                return useAuthStore();
+            },
     },
     data() {
         return {
@@ -546,6 +552,14 @@ export default {
                         }
                     }
                 }
+            }
+        },
+        async handleLogout() {
+            try {
+                await this.auth.logout();
+                this.$router.push('/authentication/sign-in/cover');
+            } catch (error) {
+                console.error('Logout failed:', error);
             }
         },
         toggleFullScreen() {

@@ -93,7 +93,7 @@ export
         tooltip: {
             enabled: false,
         },
-        colors: ["rgb(132, 90, 223)"],
+        colors: ["rgb(112, 162, 255)"],
     },
 
 

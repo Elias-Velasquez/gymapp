@@ -7,8 +7,8 @@ export const linedata = {
     datasets: [
         {
             label: 'My First dataset',
-            backgroundColor: 'rgb(132, 90, 223)',
-            borderColor: 'rgb(132, 90, 223)',
+            backgroundColor: 'rgb(112, 162, 255)',
+            borderColor: 'rgb(112, 162, 255)',
             data: data.value,
             borderWidth: 2,
             fill: false,
@@ -37,8 +37,8 @@ export const bardata = {
         {
             label: 'My First Dataset',
             data: [65, 59, 80, 81, 56, 55, 40],
-            backgroundColor: ['rgba(132, 90, 223, 0.2)', 'rgba(35, 183, 229, 0.2)', 'rgba(245, 184, 73, 0.2)', 'rgba(73, 182, 245, 0.2)', 'rgba(230, 83, 60, 0.2)', 'rgba(38, 191, 148, 0.2)', 'rgba(35, 35, 35, 0.2)'],
-            borderColor: ['rgb(132, 90, 223)', 'rgb(35, 183, 229)', 'rgb(245, 184, 73)', 'rgb(73, 182, 245)', 'rgb(230, 83, 60)', 'rgb(38, 191, 148)', 'rgb(35, 35, 35)'],
+            backgroundColor: ['rgba(112, 162, 255, 0.2)', 'rgba(35, 183, 229, 0.2)', 'rgba(245, 184, 73, 0.2)', 'rgba(73, 182, 245, 0.2)', 'rgba(230, 83, 60, 0.2)', 'rgba(38, 191, 148, 0.2)', 'rgba(35, 35, 35, 0.2)'],
+            borderColor: ['rgb(112, 162, 255)', 'rgb(35, 183, 229)', 'rgb(245, 184, 73)', 'rgb(73, 182, 245)', 'rgb(230, 83, 60)', 'rgb(38, 191, 148)', 'rgb(35, 35, 35)'],
             borderWidth: 1
         },
     ],
@@ -49,7 +49,7 @@ export const singledata = {
         label: 'My First Dataset',
         data: [300, 50, 100],
         backgroundColor: [
-            'rgb(132, 90, 223)',
+            'rgb(112, 162, 255)',
             'rgb(35, 183, 229)',
             'rgb(245, 184, 73)',
         ],
@@ -62,7 +62,7 @@ export const singledata2 = {
         label: 'My First Dataset',
         data: [11, 16, 7, 3, 14],
         backgroundColor: [
-            'rgb(132, 90, 223)',
+            'rgb(112, 162, 255)',
             'rgb(75, 192, 192)',
             'rgb(245, 184, 73)',
             'rgb(201, 203, 207)',
@@ -77,12 +77,12 @@ export const radialdata = computed(() => ({
             label: 'My First Dataset',
             data: [65, 59, 90, 81, 56, 55, 40],
             fill: true,
-            backgroundColor: 'rgba(132, 90, 223, 0.2)',
-            borderColor: 'rgb(132, 90, 223)',
-            pointBackgroundColor: 'rgb(132, 90, 223)',
+            backgroundColor: 'rgba(112, 162, 255, 0.2)',
+            borderColor: 'rgb(112, 162, 255)',
+            pointBackgroundColor: 'rgb(112, 162, 255)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(132, 90, 223)'
+            pointHoverBorderColor: 'rgb(112, 162, 255)'
         },
         {
             label: 'My Second Dataset',
@@ -104,7 +104,7 @@ export const Bubbledata = computed(() => ({
             { x: 20, y: 30, r: 15 },
             { x: 40, y: 10, r: 10 },
         ],
-        backgroundColor: 'rgb(132, 90, 223)',
+        backgroundColor: 'rgb(112, 162, 255)',
     }]
 }));
 export const scatterdata = computed(() => ({
@@ -116,6 +116,6 @@ export const scatterdata = computed(() => ({
             { x: 10, y: 5 },
             { x: 0.5, y: 5.5 }
         ],
-        backgroundColor: 'rgb(132, 90, 223)',
+        backgroundColor: 'rgb(112, 162, 255)',
     }]
 }));

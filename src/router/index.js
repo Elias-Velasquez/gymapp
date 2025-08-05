@@ -11,7 +11,7 @@ const routes = [
       [
         {
           path: '',
-          redirect: 'dashboard/crm',
+          redirect: 'authentication/sign-in/cover',
         },
         //Dashboard
         {
@@ -85,6 +85,11 @@ const routes = [
           path: `pages`,
           name: 'Pages',
           children: [
+            {
+              path: 'users',
+              name: "Usuarios",
+              component: () => import("../components/pages/users.vue"),
+            },
             {
               path: 'about-us',
               name: "About Us",
@@ -1093,6 +1098,22 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const publicPages = [
+    '/authentication/sign-in/cover',
+    '/authentication/sign-up/basic',
+    // ... agrega otras rutas públicas si las tienes
+  ];
+  const authRequired = !publicPages.includes(to.path);
+  const token = localStorage.getItem('token');
+
+  if (authRequired && !token) {
+    return next('/authentication/sign-in/cover');
+  }
+
+  next();
 });
 
 export default router;
