@@ -4,6 +4,7 @@ import ContactCardComponent from '../../shared/components/@spk/contacts-cards.vu
 import * as prism from "../../data/prismCode/table/tables.js";
 import DatatableVue from '../tables/datatable/datatable.vue';
 import { useUserStore } from '../../stores/users.js';
+import { useAuthStore } from '../../stores/auth.js';
 
 
 
@@ -20,15 +21,23 @@ export default {
             user() {
                 return useUserStore();
             },
+            authStore() {
+                return useAuthStore();
+            },
         },
     async mounted() {
         console.log('demo')
         await this.user.getUsers()
 
         this.items = this.user.user
+        this.userProfile = this.authStore.userData;
+
+        console.log('data', this.authStore);
+        console.log('data', this.authStore.userData);
     },
     data() {
         return {
+            userProfile: null,
             dataToPass: {
                 current: "Users",
                 list: ['Pages', 'Users']

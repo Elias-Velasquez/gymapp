@@ -1103,6 +1103,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const publicPages = [
     '/authentication/sign-in/cover',
+    '/authentication/sign-up/cover',
     '/authentication/sign-up/basic',
     // ... agrega otras rutas públicas si las tienes
   ];

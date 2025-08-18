@@ -43,6 +43,7 @@ import media31 from '/images/media/media-31.jpg';
 import filemanager3 from '/images/media/file-manager/3.png';
 import ProfileCardComponent from '../../shared/components/@spk/pages/profile-cards.vue';
 import Activities from "../../shared/components/@spk/activities.vue";
+import { useAuthStore } from '../../stores/auth.js';
 
 export default {
     components: {
@@ -50,6 +51,7 @@ export default {
     },
     data() {
         return {
+            userProfile: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null,
             dataToPass: {
                 current: "Profile",
                 list: ['Pages', 'Profile']
@@ -86,11 +88,9 @@ export default {
                     { name: "youtube", links: "", icon: "youtube", iconColor: "danger" },
                 ],
                 followers: [
-                    { name: "Alicia Sierra", email: "aliciasierra389@gmail.com", avatar: face1 },
-                    { name: "Samantha Mery", email: "samanthamery@gmail.com", avatar: face3 },
-                    { name: "Juliana Pena", email: "juliapena555@gmail.com", avatar: face6 },
-                    { name: "Adam Smith", email: "adamsmith99@gmail.com", avatar: face15 },
-                    { name: "Farhaan Amhed", email: "farhaanahmed989@gmail.com", avatar: face13 },
+                    { name: "Contrato base Enero 2025", email: "2025-01-05 13:29:00", avatar: face1 },
+                    { name: "Contrato base Junio 2025", email: "2025-06-05 14:05:00", avatar: face3 },
+                    { name: "Cambio de Contrato Vip", email: "2025-08-05 15:19:00", avatar: face6 },
                 ],
                 suggestions: [
                     { name: "Alister", avatar: face15 },
@@ -134,18 +134,17 @@ export default {
             ]
         };
     },
+    computed: {
+        authStore() {
+            return useAuthStore();
+        },
+    },
     mounted() {
-        if (!this.lightbox) {
-            this.lightbox = new PhotoSwipeLightbox({
-                gallery: '#RandomUniqueId',
-                children: 'a',
-                pswpModule: () => import('photoswipe'),
-                bgOpacity: 0.8,
-                wheelToZoom: true,
-                zoomTitle: 'Zoom',
-            });
-            this.lightbox.init();
-        }
+        console.log('profile mounted');
+        this.userProfile = this.authStore.userData;
+
+        console.log('data', this.authStore);
+        console.log('data', this.authStore.userData);
     },
     unmounted() {
         if (this.lightbox) {
@@ -172,57 +171,95 @@ export default {
                         </div>
                         <div class="flex-fill main-profile-info">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold mb-1 text-fixed-white">Json Taylor</h6>
+                                <h6 class="fw-semibold mb-1 text-fixed-white">{{this.userProfile.username}}</h6>
                                 <button class="btn btn-light btn-wave"><i
                                         class="ri-add-line me-1 align-middle"></i>Follow</button>
                             </div>
-                            <p class="mb-1 text-muted text-fixed-white op-7">Chief Executive Officer (C.E.O)</p>
+                            <p class="mb-1 text-muted text-fixed-white op-7">{{this.userProfile.roles[0].name}}</p>
                             <p class="fs-12 text-fixed-white mb-4 op-5">
-                                <span class="me-3"><i class="ri-building-line me-1 align-middle"></i>Georgia</span>
-                                <span><i class="ri-map-pin-line me-1 align-middle"></i>Washington D.C</span>
+                                <span class="me-3"><i class="ri-building-line me-1 align-middle"></i>{{this.userProfile.dni}}</span>
+                                <span><i class="ri-map-pin-line me-1 align-middle"></i>{{this.userProfile.direccion}}</span>
                             </p>
                             <div class="d-flex mb-0">
                                 <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">113</p>
-                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Projects</p>
+                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile.peso}}</p>
+                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Peso</p>
                                 </div>
                                 <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">12.2k</p>
-                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Followers</p>
+                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile.altura}}</p>
+                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Altura</p>
                                 </div>
                                 <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">128</p>
-                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Following</p>
+                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile.last_login}}</p>
+                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Ultima Sesión</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="p-4 border-bottom border-block-end-dashed">
-                        <div class="mb-4">
-                            <p class="fs-15 mb-2 fw-semibold">Professional Bio :</p>
-                            <p class="fs-12 text-muted op-7 mb-0" v-html="profileDetails.bio"> </p>
-                        </div>
-                        <div class="mb-0">
-                            <p class="fs-15 mb-2 fw-semibold">Links :</p>
-                            <div class="mb-0">
-                                <p class="mb-1" v-for="(link, index) of profileDetails.links" :key="index">
-                                    <a :href="link.links" class="text-primary"><u>{{ link.name }}</u></a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 border-bottom border-block-end-dashed">
-                        <p class="fs-15 mb-2 me-4 fw-semibold">Contact Information :</p>
+                        <p class="fs-15 mb-2 me-4 fw-semibold">Contrato :</p>
                         <div class="text-muted">
-                            <p class="mb-2" v-for="(contact, index) of profileDetails.contactInformation" :key="index">
+                            <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-${contact.icon}-line align-middle fs-14`"></i>
+                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
                                 </span>
-                                {{ contact.title }}
+                                Tipo de contrato - {{ this.userProfile.contrato?.tipoContratoId }}
                             </p>
                         </div>
+                         <div class="text-muted">
+                            <p class="mb-2">
+                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                </span>
+                                Estado de contrato - {{ this.userProfile.contrato?.estadoContratoId }}
+                            </p>
+                        </div>
+                         <div class="text-muted">
+                            <p class="mb-2">
+                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                </span>
+                                Accesos - {{ this.userProfile.contrato?.accesos }}
+                            </p>
+                        </div>
+
+                         <div class="text-muted">
+                            <p class="mb-2">
+                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                </span>
+                                Sesiones - {{ this.userProfile.contrato?.sesiones }}
+                            </p>
+                        </div>
+
+                         <div class="text-muted">
+                            <p class="mb-2">
+                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                </span>
+                                Fecha de Inicio - {{ this.userProfile.contrato?.fechaInicio }}
+                            </p>
+                        </div>
+
+                        <div class="text-muted">
+                            <p class="mb-2">
+                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                </span>
+                                Fecha de Fin - {{ this.userProfile.contrato?.fechaFin }}
+                            </p>
+                        </div>
+
                     </div>
-                    <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-center">
+
+                    <div class="p-4 border-bottom border-block-end-dashed">
+                        <div class="mb-4">
+                            <p class="fs-15 mb-2 fw-semibold">Observaciones:</p>
+                            <p class="fs-12 text-muted op-7 mb-0"> {{this.userProfile.observaciones}} </p>
+                        </div>
+                    </div>
+                    <!-- <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-center">
                         <p class="fs-15 mb-2 me-4 fw-semibold">Social Networks :</p>
                         <div class="btn-list mb-0">
                             <button
@@ -239,9 +276,9 @@ export default {
                                 <span class="badge bg-light text-muted m-1">{{ skill }}</span>
                             </a>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="p-4">
-                        <p class="fs-15 mb-2 me-4 fw-semibold">Followers :</p>
+                        <p class="fs-15 mb-2 me-4 fw-semibold">Historial de pagos :</p>
                         <ul class="list-group">
                             <li class="list-group-item" v-for="(follower, index) of profileDetails.followers"
                                 :key="index">
@@ -253,7 +290,7 @@ export default {
                                         <p class="mb-0 lh-1">{{ follower.name }}</p>
                                         <span class="fs-11 text-muted op-7">{{ follower.email }}</span>
                                     </div>
-                                    <button class="btn btn-light btn-wave btn-sm">Follow</button>
+                                    <button class="btn btn-light btn-wave btn-sm">Ver detalle</button>
                                 </div>
                             </li>
                         </ul>
@@ -263,7 +300,7 @@ export default {
         </div>
         <div class="col-xxl-8 col-xl-12">
             <div class="row">
-                <div class="col-xl-12">
+                <!-- <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-body p-0">
                             <div
@@ -499,18 +536,18 @@ export default {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-xl-4 col-xl-">
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                Personal Info
+                                Contrato
                             </div>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
-                                <li class="list-group-item" v-for="(details, key) of profileDetails.personalInformation"
-                                    :key="key">
+                                <li class="list-group-item" v-for="(details, key) of this.userProfile.contrato" :key="key">
+                                    
                                     <div class="d-flex flex-wrap align-items-center">
                                         <div class="me-2 fw-semibold">
                                             {{ key }} :
@@ -526,7 +563,7 @@ export default {
                     <div class="card custom-card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
-                                Recent Posts
+                                Entrenamientos
                             </div>
                             <div>
                                 <span class="badge bg-primary-transparent">Today</span>
@@ -557,7 +594,7 @@ export default {
                     <div class="card custom-card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
-                                Suggestions
+                                Nutrición
                             </div>
                             <div>
                                 <button class="btn btn-sm btn-success-light btn-wave">View All</button>

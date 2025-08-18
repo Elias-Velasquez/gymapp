@@ -73,6 +73,7 @@ import RecursiveMenu from '../../UI/recursiveMenu.vue';
 import { menuData } from '../../../data/menuData';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import { filterMenuByRole } from '../../../data/utils/filterMenuByRole';
 export default {
   components: {
     RecursiveMenu,
@@ -82,7 +83,7 @@ export default {
       setMenu: false,
       menuOverflowed: false,
       previousUrl: '/',
-      menuData,
+      menuData: filterMenuByRole(menuData, localStorage.getItem('role') || 'ROLE_USER'),
       WindowPreSize: [window.innerWidth],
       oldLi: undefined,
       level: 0,
@@ -91,11 +92,18 @@ export default {
       hasParent: false,
       hasParentLevel: 0,
       url: import.meta.env.BASE_URL,
+      role: localStorage.getItem('role') || 'ROLE_USER'
     };
+  },
+  computed: {
+    filteredMenuData() {
+      return filterMenuByRole(this.menuData, this.role);
+    }
   },
   methods: {
     // Start of Toggle menu event
     toggleSubmenu(event, targetObject, menuData = this.menuData, level = this.level) {
+      console.log(this.filteredMenuData, '2')
       let html = document.documentElement;
       let element = event.target;
       if ((html.getAttribute('data-nav-style') == "icon-hover" && html.getAttribute("data-toggled") == 'icon-hover-closed') || (html.getAttribute("data-toggled") == 'menu-hover-closed' && html.getAttribute('data-nav-style') == "menu-hover")) { return; }

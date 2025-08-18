@@ -34,7 +34,11 @@ export default {
         async handleLogin() {
             await this.auth.login(this.username, this.password);
             if (this.auth.token) {
-                this.router.push('/dashboard/crm');
+                if(this.auth.role === 'ROLE_ADMIN') {
+                    this.router.push('/dashboard/crm');
+                } else {
+                    this.router.push('/pages/profile');
+                }
             } else if (this.auth.error) {
                 
             }
@@ -44,8 +48,13 @@ export default {
         this.router = useRouter();
         document.body.classList.add('bg-white');
          const token = localStorage.getItem('token');
+         const role = localStorage.getItem('role');
         if (token) {
+            if (role === 'ROLE_ADMIN') {
             this.router.push('/dashboard/crm');
+            } else {
+            this.router.push('/pages/profile');
+            }
         }
     },
     unmounted() {

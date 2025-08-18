@@ -420,7 +420,7 @@ export const switcherStore = defineStore({
             }
 
             // clearing localstorage
-            localStorage.clear();
+            // localStorage.clear();
 
             // reseting to light
             this.colorthemeFn('light');
