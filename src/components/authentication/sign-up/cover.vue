@@ -81,7 +81,7 @@ export default {
             <div class="row justify-content-center align-items-center h-100">
         <div class="col-xxl-6 col-xl-7 col-lg-7 col-md-7 col-sm-8 col-12">
           <div class="p-5">
-            <p class="h5 fw-semibold mb-2">Sign Up</p>
+            <p class="h5 fw-semibold mb-2">Registrarse</p>
             <div class="row gy-3">
               <div class="col-xl-12">
                 <label class="form-label">Email</label>
@@ -139,8 +139,12 @@ export default {
               </div>
 
               <div class="col-xl-12 d-grid mt-3">
-                <button class="btn btn-lg btn-primary" @click.prevent="submit">Create Account</button>
+                <button class="btn btn-lg btn-primary" @click.prevent="submit">Crear Cuenta</button>
               </div>
+              <div class="text-center">
+                            <p class="fs-12 text-muted mt-4">¿Ya tienes cuenta? <router-link
+                                    to="/authentication/sign-in/cover" class="text-primary">Inicia Sesión</router-link></p>
+                        </div>
             </div>
           </div>
         </div>
