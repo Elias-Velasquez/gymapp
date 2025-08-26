@@ -259,6 +259,17 @@ const routes = [
               path: 'profile',
               name: "Profile",
               component: () => import("../components/pages/profile.vue"),
+              children: [
+                 {
+                  path: "edit-profile",
+                  component: () =>
+                    import("../components/pages/editProfile.vue"),
+                  },
+              ]
+            },{
+              path: 'edit-profile',
+              name: "Editar perfíl",
+              component: () => import("../components/pages/editProfile.vue"),
             },
             {
               path: 'reviews',

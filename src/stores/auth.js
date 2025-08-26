@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', {
           username,
           password,
         })
-        console.log('re', response)
+
         // Supongamos que el backend devuelve un token y usuario
         this.token = response.data.token
         this.user = response.data.username
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
 
         const decoded = jwtDecode(this.token)
         let authorities = []
-        console.log('decoded', decoded)
+
         try {
           authorities = JSON.parse(decoded.authorities)
         } catch (e) {
@@ -94,6 +94,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('userData')
     },
     async getUserData(email, token) {
+
       this.loading = true
       this.error = null
       this.message = null
@@ -104,7 +105,7 @@ export const useAuthStore = defineStore('auth', {
             Authorization: `Bearer ${token}`
           }
         })
-        console.log('response', response)
+       
          let roles = response.data.roles
           if (!Array.isArray(roles) || roles.length === 0) {
             roles = [{ id: 2, name: 'ROLE_USER' }]
@@ -130,14 +131,15 @@ export const useAuthStore = defineStore('auth', {
 
     },
 
-    loadFromStorage() {
+    async loadFromStorage() {
       this.token = localStorage.getItem('token')
       const user = localStorage.getItem('user')
        const role = localStorage.getItem('role')
       this.user = user ? JSON.parse(user) : null
+      this.role = role || null
 
       if (this.user && this.token) {
-        this.getUserData(this.user, this.token) // 🔥 vuelve a cargar los datos
+        await this.getUserData(this.user, this.token) // 🔥 vuelve a cargar los datos
       }
     },
     async register(user, imageFile) {
@@ -149,7 +151,7 @@ export const useAuthStore = defineStore('auth', {
 
         // imagen como file
         formData.append("imagen", imageFile)
-        console.log('formData1', formData.get('userJson'))
+       
         let token = await this.loginToRegister('email@email.com', '1234')
 
         const { data } = await axios.post("http://69.62.111.126:8080/api/users/register", formData, {

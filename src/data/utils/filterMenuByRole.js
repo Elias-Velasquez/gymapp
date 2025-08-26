@@ -1,6 +1,6 @@
 // utils/filterMenuByRole.js
 export function filterMenuByRole(menuData, role) {
-    console.log('1 ')
+
   return menuData
     .map(item => {
       // Si el item tiene hijos, filtrarlos primero

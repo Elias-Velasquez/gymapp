@@ -529,7 +529,7 @@ export const switcherStore = defineStore({
             let html = document.querySelector('html');
 
             // clearing localstorage
-            localStorage.clear();
+            // localStorage.clear();
 
             // reseting to light
             this.colorthemeFn('light');

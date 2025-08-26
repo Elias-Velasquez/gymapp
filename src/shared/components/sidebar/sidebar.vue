@@ -103,7 +103,7 @@ export default {
   methods: {
     // Start of Toggle menu event
     toggleSubmenu(event, targetObject, menuData = this.menuData, level = this.level) {
-      console.log(this.filteredMenuData, '2')
+     
       let html = document.documentElement;
       let element = event.target;
       if ((html.getAttribute('data-nav-style') == "icon-hover" && html.getAttribute("data-toggled") == 'icon-hover-closed') || (html.getAttribute("data-toggled") == 'menu-hover-closed' && html.getAttribute('data-nav-style') == "menu-hover")) { return; }

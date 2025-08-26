@@ -3,12 +3,28 @@
   <div class="row">
     <div class="col-xl-12">
       <SimpleCardComponent :title="title">
-        <EasyDataTable class="table text-nowrap" :headers="headers" :items="items" border-cell :rowsPerPage="5"
-          :rowsItems="[5, 10, 25, 50, 100]"> 
-          <template #item-actions="{ item }">
-            <button class="btn btn-sm btn-primary me-1" @click="$emit('edit', item)">Editar</button>
-            <button class="btn btn-sm btn-warning me-1" @click="$emit('view', item)">Ver</button>
-            <button class="btn btn-sm btn-danger" @click="$emit('delete', item)">Eliminar</button>
+        <EasyDataTable class="table text-nowrap" :headers="headers" :items="items" border-cell :rowsPerPage="25"  
+                body-text-direction="center"
+                header-text-direction="center"
+          :rowsItems="[5, 10, 25, 50, 100]" > 
+           <!-- Slot para status -->
+          <template #item-status="item">
+            <span 
+              class="badge" 
+              :class="{
+                'bg-danger': item.status === 'Baja',
+                'bg-success': item.status === 'Alta',
+                'bg-primary': item.status === 'Pendiente'
+              }"
+            >
+              {{ item.status }}
+            </span>
+          </template>
+
+          <template #item-actions="item">
+            <button class="btn btn-sm btn-warning me-1" @click="$emit('view', item)"><i class="ri-eye-line me-1"></i>Ver</button>
+            <button class="btn btn-sm btn-primary me-1" @click="$emit('edit', item)"><i class="ri-edit-line me-1"></i>Editar</button>
+            <button class="btn btn-sm btn-danger" @click="$emit('delete', item)"><i class="ri-delete-bin-line me-1"></i>Eliminar</button>
           </template>
         </EasyDataTable>
       </SimpleCardComponent>
@@ -23,6 +39,7 @@ import { Header, Item } from 'vue3-easy-data-table';
 import SimpleCardComponent from "../../../shared/UI/simple-cards.vue"
 
 export default defineComponent({
+  emits: ['edit', 'view', 'delete'],
   components: {
     PageHeader,
     SimpleCardComponent 
@@ -35,35 +52,38 @@ export default defineComponent({
     dataToPass: {
       type: Object,
       default: () => ({
-        current: "Data Tables",
-        list: ['Tables', 'Data Tables']
+        // current: "Gestión",
+        // list: ['Tables', 'Data Tables']
       })
     },
     headers: {
-      type: Array,
+      type: Array as () => Header[],
       required: true
     },
     items: {
-      type: Array,
+      type: Array as () => Item[],
       required: true
     },
   },
   setup() {
-    return {
 
+
+    return {
+      // headers,
+      // items
     };
   },
   methods: {
     handleEdit(item) {
-      console.log("Editar:", item);
+
       // lógica para editar
     },
     handleView(item) {
-      console.log("Ver:", item);
+
       // lógica para ver
     },
     handleDelete(item) {
-      console.log("Eliminar:", item);
+;
       // lógica para eliminar
     }
   }
