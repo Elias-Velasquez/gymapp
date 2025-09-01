@@ -57,7 +57,31 @@ export default {
       await this.sleep(5000);
     
       try {
-        let response = await this.userStore.editProfile(this.authStore.userData.username, this.formUser)
+        console.log(this.formUser, 'asd');
+        const userJson = {
+          username: this.formUser.username,
+          password: this.formUser.password || "1234", // ⚠️ si no lo tienes en el form, pon un valor por defecto o pide al user
+          nombre: this.formUser.nombre,
+          apellidos: this.formUser.apellidos,
+          dni: this.formUser.dni,
+          peso: this.formUser.peso,
+          altura: this.formUser.altura,
+          direccion: this.formUser.direccion,
+          observaciones: this.formUser.observaciones,
+        };
+
+        const formData = new FormData();
+        formData.append("userJson", JSON.stringify(userJson));
+
+       if (this.formUser.imagen) {
+        formData.append("imagen", this.formUser.imagen);
+      } else {
+        // enviamos null explícitamente si no hay imagen
+        formData.append("imagen", new Blob(), ""); 
+        // ⚠️ el backend lo recibe como campo vacío
+      }
+
+        let response = await this.userStore.editProfile(this.authStore.userData.username, formData)
 
         // Actualizar store y localStorage
         this.authStore.userData = { ...this.authStore.userData, ...this.formUser };

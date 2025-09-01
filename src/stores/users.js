@@ -16,6 +16,7 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async getUsers() {
+      console.log('Fetching users...')
       this.loading = true
       this.error = null
       this.message = null
@@ -65,12 +66,11 @@ export const useUserStore = defineStore('user', {
         try {
 
           const response = await axios.put(
-            `http://69.62.111.126:8080/api/users/${username}`,
+            `http://69.62.111.126:8080/api/users`,
             formData,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
               }
             }
           )

@@ -26,8 +26,8 @@ export default {
                 contrato: {}
                 },
             dataToPass: {
-                current: "Profile",
-                list: ['Pages', 'Profile']
+                current: "Mis Datos",
+                // list: ['Pages', 'Profile']
             },
             lightbox: null,
 
@@ -145,7 +145,7 @@ export default {
                         </div> -->
                         <div class="flex-fill main-profile-info">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold mb-1 text-fixed-white">{{this.userProfile?.username}}</h6>
+                                <h6 class="fw-semibold mb-1 text-fixed-white">{{this.userProfile?.username}} <i :class="`ri-id-card-line align-middle fw-normal fs-25`"></i></h6>
                                 <button 
                                     class="btn btn-light btn-wave"
                                     @click="$router.push(mode === 'self' 
@@ -162,15 +162,15 @@ export default {
                             </p>
                             <div class="d-flex mb-0">
                                 <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.peso}}</p>
+                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.peso}} <i :class="`ri-weight-line fw-normal align-middle fs-18`"></i></p>
                                     <p class="mb-0 fs-11 op-5 text-fixed-white">Peso</p>
                                 </div>
                                 <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.altura}}</p>
+                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.altura}} <i :class="`ri-expand-height-line fw-normal align-middle fs-18`"></i></p>
                                     <p class="mb-0 fs-11 op-5 text-fixed-white">Altura</p>
                                 </div>
                                 <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.last_login}}</p>
+                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.last_login}} <i :class="`ri-pass-valid-line fw-normal align-middle fs-18`"></i> </p>
                                     <p class="mb-0 fs-11 op-5 text-fixed-white">Ultima Sesión</p>
                                 </div>
                             </div>
@@ -178,11 +178,19 @@ export default {
                     </div>
                     
                     <div class="p-4 border-bottom border-block-end-dashed">
-                        <p class="fs-15 mb-2 me-4 fw-semibold">Contrato :</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p class="fs-15 mb-2 me-4 fw-semibold">Contrato Actual:</p>
+                            <button 
+                                    class="btn btn-light btn-wave"
+                                    >
+                                    <i class="ri-file-add-line me-1 align-middle"></i>Agregar contracto
+                                    </button>
+                        </div>
+                        
                         <div class="text-muted">
                             <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                    <i :class="`ri-contract-line align-middle fs-14`"></i>
                                 </span>
                                 Tipo de contrato - {{ this.userProfile?.contrato?.tipoContratoId }}
                             </p>
@@ -190,7 +198,7 @@ export default {
                          <div class="text-muted">
                             <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                    <i :class="`ri-alert-line align-middle fs-14`"></i>
                                 </span>
                                 Estado de contrato - {{ this.userProfile?.contrato?.estadoContratoId }}
                             </p>
@@ -198,7 +206,7 @@ export default {
                          <div class="text-muted">
                             <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                    <i :class="`ri-arrow-up-box-line align-middle fs-14`"></i>
                                 </span>
                                 Accesos - {{ this.userProfile?.contrato?.accesos }}
                             </p>
@@ -207,7 +215,7 @@ export default {
                          <div class="text-muted">
                             <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                    <i :class="`ri-pass-valid-line align-middle fs-14`"></i>
                                 </span>
                                 Sesiones - {{ this.userProfile?.contrato?.sesiones }}
                             </p>
@@ -216,7 +224,7 @@ export default {
                          <div class="text-muted">
                             <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                    <i :class="`ri-calendar-check-fill align-middle fs-14`"></i>
                                 </span>
                                 Fecha de Inicio - {{ this.userProfile?.contrato?.fechaInicio }}
                             </p>
@@ -225,7 +233,7 @@ export default {
                         <div class="text-muted">
                             <p class="mb-2">
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-phone-line align-middle fs-14`"></i>
+                                    <i :class="`ri-calendar-close-fill align-middle fs-14`"></i>
                                 </span>
                                 Fecha de Fin - {{ this.userProfile?.contrato?.fechaFin }}
                             </p>
@@ -240,7 +248,7 @@ export default {
                         </div>
                     </div>
 
-                    <div class="p-4">
+                    <!-- <div class="p-4">
                         <p class="fs-15 mb-2 me-4 fw-semibold">Historial de pagos :</p>
                         <ul class="list-group">
                             <li class="list-group-item" v-for="(follower, index) of profileDetails.followers"
@@ -257,18 +265,18 @@ export default {
                                 </div>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
-        <div class="col-xxl-8 col-xl-12">
+        <div class="col-xxl-4 col-xl-12">
             <div class="row">
 
-                <div class="col-xl-4 col-xl-">
+                <div class="col-xl-8 col-xl-">
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                Contrato
+                                Contratos
                             </div>
                         </div>
                         <div class="card-body">
@@ -286,7 +294,7 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-4">
+                <!-- <div class="col-xl-4">
                     <div class="card custom-card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
@@ -347,7 +355,7 @@ export default {
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

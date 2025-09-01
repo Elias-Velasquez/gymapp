@@ -123,6 +123,8 @@ export default {
             const modal = Modal.getInstance(modalEl);
             modal.hide();
             this.userToDelete = null;
+            await this.user.getUsers()
+            this.items = this.user.user
             } else {
             alert("Error al eliminar usuario ❌");
             }
