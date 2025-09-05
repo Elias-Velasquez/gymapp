@@ -38,13 +38,13 @@
             <div class="header-content-right">
 
                 <!-- Start::header-element -->
-                <div class="header-element header-search">
-                    <!-- Start::header-link -->
+                <!-- <div class="header-element header-search">
+                    
                     <a href="javascript:void(0);" class="header-link" data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="bx bx-search-alt-2 header-link-icon"></i>
                     </a>
-                    <!-- End::header-link -->
-                </div>
+                    
+                </div> -->
                 <!-- End::header-element -->
 
                 <!-- Start::header-element -->
@@ -281,8 +281,14 @@
                            <img src="/images/faces/9.jpg" alt="img" width="32" height="32" class="rounded-circle"> 
                         </div> 
                         <div class="d-sm-block d-none"> 
-                            <p class="fw-semibold mb-0 lh-1">{{auth.user}}</p>
-                            <span class="op-7 fw-normal d-block fs-11">{{auth.role}}</span> 
+                            <p class="fw-semibold mb-0 lh-1">{{ displayName }}</p>
+        
+                            <!-- Username (email) -->
+                            <small class="text-muted text-center d-block">{{ auth.user }}</small>
+                            
+                            <!-- Rol -->
+                            <span v-if="auth.role == 'ROLE_ADMIN'" class="op-7 fw-normal text-center d-block fs-11 badge bg-info" >Administrador</span> 
+                            <span v-else-if="auth.role == 'ROLE_USER'" class="op-7 fw-normal color-info d-block text-center fs-11 badge bg-info">Cliente</span> 
                         </div> 
                     </div> 
                 </a> <!-- End::header-link|dropdown-toggle --> 
@@ -424,6 +430,17 @@ export default {
         auth() {
                 return useAuthStore();
             },
+
+           displayName() {
+                console.log(this.auth.userData, 'auth')
+                
+
+                const { nombre, apellidos, username } = this.auth.userData;
+                if (nombre && apellidos) {
+                return `${nombre} ${apellidos}`;
+                }
+                return username; // si no tiene nombre/apellido, mostramos el email
+            } 
     },
     data() {
         return {
@@ -553,6 +570,8 @@ export default {
     },
     async mounted() {
         await this.auth.loadFromStorage();
+
+        console.log(this.auth, 'demo')
         document.addEventListener("fullscreenchange", this.fullscreenchanged);
     },
 }

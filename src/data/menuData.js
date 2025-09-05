@@ -36,7 +36,7 @@ export let menuData = [
         ]
     },
     {
-        headTitle: 'GESTIÓN DE USUARIOS'
+        headTitle: 'GESTIÓN DE CLIENTES',
     },
     {
         type: 'sub',
@@ -51,51 +51,51 @@ export let menuData = [
             {
                 path: '/pages/users',
                 type: 'link',
-                title: 'Usuarios',
+                title: 'Clientes',
                 selected: false,
                 active: false,
                 dirchange: false,
                 roles: ['ROLE_ADMIN']
             },
-            {
-                path: '/pages/about-us',
-                type: 'link',
-                title: 'Sobre Nosotros',
-                selected: false,
-                active: false,
-                dirchange: false,
-                 roles: ['ROLE_ADMIN']
-            },
+            // {
+            //     path: '/pages/about-us',
+            //     type: 'link',
+            //     title: 'Sobre Nosotros',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //      roles: ['ROLE_ADMIN']
+            // },
 
-            {
-                path: '/pages/contact-us',
-                type: 'link',
-                title: 'Contactanos',
-                selected: false,
-                active: false,
-                dirchange: false,
-                 roles: ['ROLE_ADMIN']
-            },
+            // {
+            //     path: '/pages/contact-us',
+            //     type: 'link',
+            //     title: 'Contactanos',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //      roles: ['ROLE_ADMIN']
+            // },
 
-            {
-                path: '/pages/faqs',
-                type: 'link',
-                title: 'Preguntas Frecuentes',
-                selected: false,
-                active: false,
-                dirchange: false,
-                 roles: ['ROLE_ADMIN']
-            },
+            // {
+            //     path: '/pages/faqs',
+            //     type: 'link',
+            //     title: 'Preguntas Frecuentes',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //      roles: ['ROLE_ADMIN']
+            // },
 
-            {
-                path: '/pages/landing',
-                type: 'link',
-                title: 'Landing',
-                selected: false,
-                active: false,
-                dirchange: false,
-                 roles: ['ROLE_ADMIN']
-            },
+            // {
+            //     path: '/pages/landing',
+            //     type: 'link',
+            //     title: 'Landing',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //      roles: ['ROLE_ADMIN']
+            // },
 
             {
                 path: '/pages/profile',
@@ -107,24 +107,24 @@ export let menuData = [
                  roles: ['ROLE_ADMIN', 'ROLE_USER']
             },
 
-            {
-                path: '/pages/team',
-                type: 'link',
-                title: 'Staff',
-                selected: false,
-                active: false,
-                dirchange: false,
-                 roles: ['ROLE_ADMIN']
-            },
-            {
-                path: '/pages/terms-conditions',
-                type: 'link',
-                title: 'Terminos y Condiciones',
-                selected: false,
-                active: false,
-                dirchange: false,
-                 roles: ['ROLE_ADMIN']
-            },
+            // {
+            //     path: '/pages/team',
+            //     type: 'link',
+            //     title: 'Staff',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //      roles: ['ROLE_ADMIN']
+            // },
+            // {
+            //     path: '/pages/terms-conditions',
+            //     type: 'link',
+            //     title: 'Terminos y Condiciones',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //      roles: ['ROLE_ADMIN']
+            // },
 
         ]
     },

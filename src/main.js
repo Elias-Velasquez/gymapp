@@ -30,10 +30,12 @@ import { VueEditor } from "vue3-editor";
 import TableComponent from '../src/shared/UI/tables-re.vue';
 import { vMaska } from 'maska';
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import 'vue3-perfect-scrollbar/style.css';
 
 const app = createApp(App);
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 const vuetify = createVuetify({ ssr: false, components, directives, });
 app.use(pinia);
 app.component('apexchart', VueApexCharts);

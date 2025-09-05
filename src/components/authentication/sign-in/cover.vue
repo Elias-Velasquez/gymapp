@@ -65,13 +65,13 @@ export default {
 
 <template>
     <div class="row authentication mx-0">
-        <div class="col-xxl-7 col-xl-7 col-lg-12">
+        <div class="col-xxl-6 col-xl-6 col-lg-12">
             <div class="row justify-content-center align-items-center h-100">
                 <div class="col-xxl-6 col-xl-7 col-lg-7 col-md-7 col-sm-8 col-12">
                     <div class="p-5">
                          <div class="row gy-3">
                             <div class="col-12">
-                                <img src="../../../../assets/gym-logo.png" width="160" class="mb-3 authentication-logo d-block mx-auto" alt="">
+                                <img src="../../../../assets/logo-circular.png" width="200" class="mb-5 authentication-logo d-block mx-auto" alt="">
                             </div>
                             </div>
                         <p class="h5 mb-4 fw-semibold mb-2">Iniciar Sesión</p>
@@ -102,8 +102,8 @@ export default {
                             </div>
 
                             <div class="col-xl-12 mt-0">
-                                <label for="signin-username" class="form-label text-default">Nombre de Usuario</label>
-                                <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="usuario" v-model="username">
+                                <label for="signin-username" class="form-label text-default">Nombre de Cliente</label>
+                                <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="cliente" v-model="username">
                             </div>
                             <div class="col-xl-12 mb-3">
                                 <label for="signin-password"
@@ -123,17 +123,17 @@ export default {
                                 <button class="btn btn-lg btn-primary" @click="handleLogin">Acceder</button>
                             </div>
                         </div>
-                        <div class="text-center">
+                        <!-- <div class="text-center">
                             <p class="fs-12 text-muted mt-4">¿No tienes una cuenta? <router-link
                                     to="/authentication/sign-up/cover" class="text-primary">Registrarse</router-link></p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xxl-5 col-xl-5 col-lg-5 d-xl-block d-none px-0">
-            <div class="authentication-cover">
-                <div class="aunthentication-cover-content rounded">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 d-xl-block d-none px-0">
+            <div class="authentication-cover custom-bg">
+                <!-- <div class="aunthentication-cover-content rounded">
                     <swiper :navigation="true" :pagination="{ clickable: true }" :keyboard="{ enabled: true, }"
                         :modules="modules" class="swiper-wrapper">
                         <swiper-slide>
@@ -173,10 +173,17 @@ export default {
                             </div>
                         </swiper-slide>
                     </swiper>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.custom-bg {
+  background-image: url('../../../../assets/background-login.jpg'); /* tu imagen */
+  background-size: cover;   /* que cubra toda el área */
+  background-position: center; /* centrada */
+  background-repeat: no-repeat;
+}
+</style>

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-xl-12">
       <SimpleCardComponent :title="title">
-        <EasyDataTable class="table text-nowrap" :headers="headers" :items="items" border-cell :rowsPerPage="25"  
+        <EasyDataTable class="table text-nowrap" tableClass="table text-nowrap table-hover" :headers="headers" :items="items" border-cell :rowsPerPage="25"  
                 body-text-direction="center"
                 header-text-direction="center"
           :rowsItems="[5, 10, 25, 50, 100]" > 
@@ -22,9 +22,46 @@
           </template>
 
           <template #item-actions="item">
-            <button class="btn btn-sm btn-warning me-1" @click="$emit('view', item)"><i class="ri-eye-line me-1"></i>Ver</button>
-            <button class="btn btn-sm btn-primary me-1" @click="$emit('edit', item)"><i class="ri-edit-line me-1"></i>Editar</button>
-            <button class="btn btn-sm btn-danger" @click="$emit('delete', item)"><i class="ri-delete-bin-line me-1"></i>Eliminar</button>
+            <!-- Ver -->
+            <button 
+              class="btn btn-sm btn-warning me-1" 
+              @click="$emit('view', item)" 
+              data-bs-toggle="tooltip" 
+              data-bs-placement="top" 
+              title="Ver">
+              <i class="ri-eye-line"></i>
+            </button>
+
+            <!-- Editar -->
+            <button 
+              class="btn btn-sm btn-info me-1" 
+              @click="$emit('edit', item)" 
+              data-bs-toggle="tooltip" 
+              data-bs-placement="top" 
+              title="Editar">
+              <i class="ri-edit-line"></i>
+            </button>
+
+            <button 
+              v-if="showAssistance" 
+              class="btn btn-sm btn-success me-1" 
+              @click="$emit('assistance', item)" 
+              data-bs-toggle="tooltip" 
+              data-bs-placement="top" 
+              title="Asistencia">
+              <i class="ri-hand"></i>
+            </button>
+            <!-- Eliminar -->
+            <button 
+              class="btn btn-sm btn-danger" 
+              @click="$emit('delete', item)" 
+              data-bs-toggle="tooltip" 
+              data-bs-placement="top" 
+              title="Eliminar">
+              <i class="ri-delete-bin-line"></i>
+            </button>
+
+            <!-- Asistencia -->
           </template>
         </EasyDataTable>
       </SimpleCardComponent>
@@ -33,10 +70,11 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, onMounted  } from 'vue';
 import PageHeader from "../../../shared/components/pageheader/pageheader.vue";
 import { Header, Item } from 'vue3-easy-data-table';
-import SimpleCardComponent from "../../../shared/UI/simple-cards.vue"
+import SimpleCardComponent from "../../../shared/UI/simple-cards.vue";
+import { Tooltip } from 'bootstrap';
 
 export default defineComponent({
   emits: ['edit', 'view', 'delete'],
@@ -64,9 +102,16 @@ export default defineComponent({
       type: Array as () => Item[],
       required: true
     },
+    showAssistance: {   // ✅ Nueva prop
+      type: Boolean,
+      default: false
+    }
   },
   setup() {
-
+    onMounted(() => {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map((tooltipTriggerEl) => new Tooltip(tooltipTriggerEl));
+    });
 
     return {
       // headers,

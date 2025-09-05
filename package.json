@@ -38,6 +38,7 @@
     "perfect-scrollbar": "^1.5.6",
     "photoswipe": "^5.4.4",
     "pinia": "^2.2.4",
+    "pinia-plugin-persistedstate": "^3.2.0",
     "remixicon": "^4.5.0",
     "sass": "^1.69.5",
     "simplebar": "6.2.5",

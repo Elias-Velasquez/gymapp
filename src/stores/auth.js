@@ -94,7 +94,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('userData')
     },
     async getUserData(email, token) {
-
+      console.log('Fetching user data for:', email)  
       this.loading = true
       this.error = null
       this.message = null
@@ -142,25 +142,21 @@ export const useAuthStore = defineStore('auth', {
         await this.getUserData(this.user, this.token) // 🔥 vuelve a cargar los datos
       }
     },
-    async register(user, imageFile) {
+    async register(formData) {
       try {
-        const formData = new FormData()
 
         // userJson como string
-        formData.append("userJson", JSON.stringify(user))
+        // formData.append("userJson", JSON.stringify(user))
 
-        // imagen como file
-        formData.append("imagen", imageFile)
-       
         let token = await this.loginToRegister('email@email.com', '1234')
-
+        console.log('5')
         const { data } = await axios.post("http://69.62.111.126:8080/api/users/register", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`
           }
         })
-
+        console.log('6')
         return data
       } catch (error) {
         console.error("Error en register:", error)
@@ -168,4 +164,5 @@ export const useAuthStore = defineStore('auth', {
       }
     }
   },
+  persist: true
 })

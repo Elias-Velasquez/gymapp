@@ -87,7 +87,7 @@ const routes = [
           children: [
             {
               path: 'users',
-              name: "Usuarios",
+              name: "Clientes",
               component: () => import("../components/pages/users.vue"),
             },
             {

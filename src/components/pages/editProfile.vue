@@ -120,7 +120,7 @@ export default {
             <div class="row gy-3">
               <!-- Username -->
               <div class="col-xl-6">
-                <label class="form-label">Nombre de usuario</label>
+                <label class="form-label">Nombre de cliente</label>
                 <input
                   type="text"
                   class="form-control"

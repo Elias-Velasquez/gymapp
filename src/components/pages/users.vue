@@ -6,7 +6,7 @@ import DatatableVue from '../tables/datatable/datatable.vue';
 import { Navigation, Pagination, Keyboard } from 'swiper/modules';
 import { useUserStore } from '../../stores/users.js';
 import { useAuthStore } from '../../stores/auth.js';
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Modal } from "bootstrap";
 export default {
     components: {
@@ -33,6 +33,15 @@ export default {
                         String(value).toLowerCase().includes(searchLower)
                     )
                 );
+            },
+            previewImage() {
+                console.log("asd", this.imageFile);
+            if (this.imageFile) {
+                return URL.createObjectURL(this.imageFile);
+            }
+            // imagen por defecto
+            console.log("asd");
+            return "../../../../assets/default-avatar.png";
             }
         },
     async mounted() {
@@ -40,11 +49,13 @@ export default {
         await this.user.getUsers()
 
         this.items = this.user.user
+        console.log(this.items, 'items');
         this.userProfile = this.authStore.userData;
     },
     data() {
         return {
             userProfile: null,
+            userToAssist: null,
             dataToPass: {
                 current: "Users",
                 list: ['Pages', 'Users']
@@ -54,7 +65,9 @@ export default {
                 { text: "Nombre", value: "nombre", sortable: true },
                 { text: "Apellidos", value: "apellidos", sortable: true },
                 { text: "Correo", value: "username", sortable: true },
+                 { text: "Teléfono", value: "telefono", sortable: true },
                 { text: "DNI", value: "dni", sortable: true  },
+                { text: "Contrato", value: "contrato.tipoContrato", sortable: true },
                 { text: "Peso (KG)", value: "peso", sortable: true  },
                 { text: "Altura (M)", value: "altura", sortable: true  },
                 { text: "Estado", value: "status", sortable: true  },
@@ -95,6 +108,12 @@ export default {
         };
     },
     methods: {
+        handleFileChange(e: Event) {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+            this.imageFile = target.files[0];
+        }
+        },
         handleView(user) {
         // Guardar temporalmente el usuario seleccionado en el store o en el router
             this.user.selectedUser = user; // usando Pinia store
@@ -105,6 +124,12 @@ export default {
 
             this.user.selectedUser = user;
             this.$router.push({ path: '/pages/edit-profile', query: { mode: 'admin' } });
+        },
+        handleAssistance(user) {
+            this.userToAssist = user;
+            const modalEl = document.getElementById("assistUserModal");
+            const modal = Modal.getInstance(modalEl) || new Modal(modalEl);
+            modal.show();
         },
         handleDelete(user) {
             // lógica para eliminar usuario
@@ -127,6 +152,27 @@ export default {
             this.items = this.user.user
             } else {
             alert("Error al eliminar usuario ❌");
+            }
+        },
+        async confirmAssistance() {
+            if (!this.userToAssist) return;
+
+            try {
+            // Aquí iría tu lógica para sumar asistencia
+            // Ejemplo: await this.user.addAssistance(this.userToAssist.username);
+
+            // cerrar modal
+            const modalEl = document.getElementById("assistUserModal");
+            const modal = Modal.getInstance(modalEl);
+            modal.hide();
+
+            this.userToAssist = null;
+
+            // refrescar lista de usuarios
+            await this.user.getUsers();
+            this.items = this.user.user;
+            } catch (err) {
+            alert("Error al sumar asistencia ❌");
             }
         },
          togglePassword(type: 'create-password' | 'create-confirmpassword') {
@@ -153,8 +199,12 @@ export default {
             file = new File([blob], "descarga.png", { type: blob.type });
             }
 
+             const formData = new FormData();
+            formData.append("userJson", JSON.stringify(userPayload));
+            formData.append("imagen", file);
+
             try {
-                let response = await this.authStore.register(userPayload, file);
+                let response = await this.authStore.register(formData);
 
                 await this.user.getUsers();
                 this.items = this.user.user; // ✅ ya funciona porque estamos en methods
@@ -170,6 +220,7 @@ export default {
                     document.body.style.removeProperty("padding-right");
                 }
             } catch (err) {
+                console.log(err, 'err')
                 alert("Error en el registro ❌");
             }
         }
@@ -185,11 +236,11 @@ export default {
                 <div class="card-body">
                     <div class="contact-header">
                         <div class="d-sm-flex d-block align-items-center justify-content-between">
-                            <div class="h5 fw-semibold mb-0">Panel de Usuarios</div>
+                            <div class="h5 fw-semibold mb-0">Listado de clientes</div>
                             <div class="d-flex mt-sm-0 mt-2 align-items-center">
                                 <div class="input-group">
                                      <input v-model="search" type="text" class="form-control bg-light border-0"
-                                        placeholder="Buscar Usuario" aria-describedby="search-contact-member">
+                                        placeholder="Buscar Cliente" aria-describedby="search-contact-member">
                                     <button class="btn btn-light" type="button" id="search-contact-member">
                                         <i class="ri-search-line text-muted"></i>
                                     </button>
@@ -207,22 +258,40 @@ export default {
                                 </div> -->
                                 <button class="btn btn-icon btn-secondary-light ms-2" data-bs-toggle="modal"
                     data-bs-target="#exampleModalScrollable2"><v-tooltip activator="parent"
-                                        location="top">Agregar Usuario</v-tooltip><i class="ri-add-line"></i></button>
+                                        location="top">Agregar Cliente</v-tooltip><i class="ri-add-line"></i></button>
                                         <div class="modal fade" id="exampleModalScrollable2" tabindex="-1"
                                             aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false" aria-hidden="true">
                                             <!-- Scrollable modal -->
                                             <div class="modal-dialog modal-dialog-centered" >
                                                 <div class="modal-content" style="width: 800px!important;">
                                                     <div class="modal-header">
-                                                        <h6 class="modal-title" id="staticBackdropLabel2">Agregar Usuario
+                                                        <h6 class="modal-title" id="staticBackdropLabel2">Agregar Cliente
                                                         </h6>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="p-5">
-                                                            <p class="h5 fw-semibold mb-2">Registrarse</p>
+                                                            
                                                             <div class="row gy-3">
+
+                                                            <div class="col-xl-12">
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <!-- Avatar con preview -->
+                                                                <span class="avatar avatar-xxl avatar-rounded me-3">
+                                                                <img :src="previewImage" width="300" alt="avatar" />
+                                                                </span>
+                                                                <!-- Input de archivo -->
+                                                                 <label class="form-label align-self-start">Imagen</label>
+                                                                <input 
+                                                                type="file" 
+                                                                class="form-control mt-2" 
+                                                                accept="image/*"
+                                                                @change="handleFileChange"
+                                                                >
+                                                            </div>
+                                                            </div>
+
                                                             <div class="col-xl-12">
                                                                 <label class="form-label">Email</label>
                                                                 <input v-model="createForm.username" type="email" class="form-control form-control-lg" placeholder="email">
@@ -273,10 +342,7 @@ export default {
                                                                 <input v-model="createForm.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" class="form-control form-control-lg">
                                                             </div>
 
-                                                            <div class="col-xl-12">
-                                                                <label class="form-label">Imagen</label>
-                                                                <input type="file" class="form-control" @change="e => imageFile = e.target.files[0]">
-                                                            </div>
+                                                          
 
                                                             <!-- <div class="col-xl-12 d-grid mt-3">
                                                                 <button class="btn btn-lg btn-primary" @click.prevent="submit">Agregar imagen</button>
@@ -285,7 +351,7 @@ export default {
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                                        <button type="button" class="btn btn-primary"  @click.prevent="submit">Crear Usuario
+                                                        <button type="button" class="btn btn-primary"  @click.prevent="submit">Crear Cliente
                                                             </button>
                                                     </div>
                                                     </div>
@@ -303,10 +369,12 @@ export default {
                 <DatatableVue
                 :headers="headers"
                 :items="filteredItems"
-                title="Usuarios"
+                title="Datos"
                 @edit="handleEdit"
                 @view="handleView"
                 @delete="handleDelete"
+                @assistance="handleAssistance"
+                :showAssistance="true"
                 />
             </div>
 
@@ -320,11 +388,33 @@ export default {
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Seguro que quieres eliminar al usuario <strong>{{ userToDelete?.nombre }}</strong> ({{ userToDelete?.username }})?</p>
+                    <p>¿Seguro que quieres eliminar al cliente <strong>{{ userToDelete?.nombre }}</strong> ({{ userToDelete?.username }})?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-danger" @click="confirmDelete">Eliminar</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="modal fade" id="assistUserModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Asistencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                    ¿Seguro que quieres confirmar asistencia al cliente
+                    <strong>{{ userToAssist?.nombre }}</strong>
+                    ({{ userToAssist?.username }})?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" @click="confirmAssistance">Confirmar</button>
                 </div>
                 </div>
             </div>
@@ -341,4 +431,8 @@ export default {
     <!--End::row-1 -->
 </template>
 
-<style scoped></style>
+<style scoped>
+.card-body {
+    padding: 0.80rem !important;
+}
+</style>

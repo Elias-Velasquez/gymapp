@@ -192,7 +192,7 @@ export default {
                                 <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
                                     <i :class="`ri-contract-line align-middle fs-14`"></i>
                                 </span>
-                                Tipo de contrato - {{ this.userProfile?.contrato?.tipoContratoId }}
+                                Tipo de contrato - {{ this.userProfile?.contrato?.tipoContrato }}
                             </p>
                         </div>
                          <div class="text-muted">

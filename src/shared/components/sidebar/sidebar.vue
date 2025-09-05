@@ -5,12 +5,12 @@
         <!-- Start::main-sidebar-header -->
         <div class="main-sidebar-header">
             <router-link  to="/dashboard/crm" class="header-logo">
-                <img src="/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
-                <img src="/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
-                <img src="/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
-                <img src="/images/brand-logos/toggle-dark.png" alt="logo" class="toggle-dark">
-                <img src="/images/brand-logos/desktop-white.png" alt="logo" class="desktop-white">
-                <img src="/images/brand-logos/toggle-white.png" alt="logo" class="toggle-white">
+               a <img src="/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+               b <img src="/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
+               c <img src="../../../../../assets/logo-azul.png" alt="logo" class="desktop-dark">
+               d <img src="../../../../../assets/logo-azul.png" alt="logo" class="toggle-dark">
+              e  <img src="/images/brand-logos/desktop-white.png" alt="logo" class="desktop-white">
+              f  <img src="/images/brand-logos/toggle-white.png" alt="logo" class="toggle-white">
             </router-link>
         </div>
         <!-- End::main-sidebar-header -->
@@ -50,6 +50,13 @@
                                     />
                                 </template>
 </li>
+<li class="slide">
+    <a href="javascript:void(0);" class="side-menu__item" @click="handleLogout">
+      <span class="shape1"></span><span class="shape2"></span>
+      <i class="ti ti-logout side-menu__icon"></i>
+      <span class="side-menu__label">Salir</span>
+    </a>
+  </li>
 </ul>
 
 <div class="slide-right" @click="rightArrowFn" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
@@ -60,6 +67,7 @@
 <!-- End::nav -->
 </div>
 <!-- </div> -->
+
 </PerfectScrollbar>
 <!-- End::main-sidebar -->
 
@@ -74,6 +82,7 @@ import { menuData } from '../../../data/menuData';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { filterMenuByRole } from '../../../data/utils/filterMenuByRole';
+import { useAuthStore } from '../../../stores/auth';
 export default {
   components: {
     RecursiveMenu,
@@ -102,6 +111,15 @@ export default {
   },
   methods: {
     // Start of Toggle menu event
+    async handleLogout() {
+      try {
+        const auth = useAuthStore(); // Usas tu Pinia store
+        await auth.logout();
+        this.$router.push('/authentication/sign-in/cover');
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    },
     toggleSubmenu(event, targetObject, menuData = this.menuData, level = this.level) {
      
       let html = document.documentElement;
@@ -577,5 +595,5 @@ export default {
 }
 </script>
 <style lang="">
-
+  
 </style>
