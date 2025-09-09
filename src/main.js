@@ -55,10 +55,10 @@ app.use(DropZone);
 app.use(VueSweetalert2);
 app.directive('maska', vMaska);
 app.mount('#app');
-app.use(Particles, {
-    init: async (engine) => {
-      await loadSlim(engine);
-    },
-  });
+// app.use(Particles, {
+//     init: async (engine) => {
+//       await loadSlim(engine);
+//     },
+//   });
   
 

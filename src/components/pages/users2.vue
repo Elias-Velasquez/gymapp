@@ -57,17 +57,54 @@ export default {
             userProfile: null,
             userToAssist: null,
             dataToPass: {
-                current: "Users",
+                current: "Users2",
                 list: ['Pages', 'Users']
             },
             prism,
             headers: [
-                { text: "Cliente", value: "cliente", sortable: true, width: 280 },
-                { text: "Contacto", value: "contacto", sortable: false, width: 200 },
-                { text: "Info Física", value: "fisico", sortable: false, width: 130 },
-                { text: "Estado", value: "status", sortable: true, width: 120 },
-                { text: "Acciones", value: "actions", sortable: false, width: 180 }
-            ],
+    { 
+        text: "Cliente", 
+        value: "cliente", 
+        sortable: true, 
+        width: 350  // Aumentado para dar más espacio
+    },
+    { 
+        text: "Contacto", 
+        value: "contacto", 
+        sortable: false, 
+        width: 200 
+    },
+    { 
+        text: "Info Física", 
+        value: "fisico", 
+        sortable: false, 
+        width: 130 
+    },
+    { 
+        text: "Contrato", 
+        value: "contrato", 
+        sortable: true, 
+        width: 120 
+    },
+    { 
+        text: "Estado", 
+        value: "estado", 
+        sortable: true, 
+        width: 150 
+    },
+    { 
+        text: "Observaciones", 
+        value: "observaciones", 
+        sortable: false, 
+        width: 120 
+    },
+    { 
+        text: "Acciones", 
+        value: "actions", 
+        sortable: false, 
+        width: 180 
+    }
+],
             items: [],
             search: "",
             showPassword: false,
@@ -104,24 +141,26 @@ export default {
     },
     methods: {
         async handleToggleStatus(user) {
-    try {
-        // Llamada a tu API para cambiar enabled
-        const success = await this.user.updateUserStatus(user.id, { 
-            enabled: !user.enabled 
-        });
-        
-        if (success) {
+        try {
+            // Aquí llamarías a tu API para cambiar el estado enabled
+            const updatedUser = {
+                ...user,
+                enabled: !user.enabled
+            };
+            
+            // Ejemplo de llamada (ajusta según tu API):
+            // await this.user.updateUserStatus(user.id, { enabled: !user.enabled });
+            
+            // Actualizar la lista
             await this.user.getUsers();
             this.items = this.user.user;
-            console.log(`Usuario ${user.nombre} ${!user.enabled ? 'habilitado' : 'deshabilitado'}`);
-        } else {
-            alert("Error al cambiar estado del usuario");
+            
+            console.log(`Usuario ${user.nombre} ${updatedUser.enabled ? 'habilitado' : 'deshabilitado'}`);
+        } catch (error) {
+            console.error('Error al cambiar estado del usuario:', error);
+            alert('Error al cambiar el estado del usuario');
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al cambiar el estado del usuario');
-    }
-},
+    },
         handleFileChange(e: Event) {
         const target = e.target as HTMLInputElement;
         if (target.files && target.files[0]) {
@@ -250,7 +289,7 @@ export default {
                 <div class="card-body">
                     <div class="contact-header">
                         <div class="d-sm-flex d-block align-items-center justify-content-between">
-                            <div class="h5 fw-semibold mb-0">Listado de clientes</div>
+                            <div class="h5 fw-semibold mb-0">Listado de clientes2</div>
                             <div class="d-flex mt-sm-0 mt-2 align-items-center">
                                 <div class="input-group">
                                      <input v-model="search" type="text" class="form-control bg-light border-0"
@@ -380,20 +419,15 @@ export default {
         </div>
         <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
             <div class="col-xl-12">
-               <DatatableVue
-                    :headers="headers"
-                    :items="filteredItems"
-                    title="Datos"
-                    tableType="users"
-                    :showCustomAction="true"
-                    customActionIcon="ri-checkbox-circle-line"
-                    customActionClass="btn-success-transparent"
-                    customActionTooltip="Registrar asistencia"
-                    @edit="handleEdit"
-                    @view="handleView"
-                    @delete="handleDelete"
-                    @customAction="handleAssistance"
-                    @toggleStatus="handleToggleStatus"
+                <DatatableVue
+                :headers="headers"
+                :items="filteredItems"
+                title="Datos"
+                @edit="handleEdit"
+                @view="handleView"
+                @delete="handleDelete"
+                @assistance="handleAssistance"
+                :showAssistance="true"
                 />
             </div>
 

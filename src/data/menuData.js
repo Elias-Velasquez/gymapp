@@ -57,6 +57,15 @@ export let menuData = [
                 dirchange: false,
                 roles: ['ROLE_ADMIN']
             },
+            {
+                path: '/pages/users2',
+                type: 'link',
+                title: 'Clientes2',
+                selected: false,
+                active: false,
+                dirchange: false,
+                roles: ['ROLE_ADMIN']
+            },
             // {
             //     path: '/pages/about-us',
             //     type: 'link',
