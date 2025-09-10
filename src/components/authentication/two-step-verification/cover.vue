@@ -35,7 +35,7 @@ export default {
                 <div class="col-xxl-6 col-xl-7 col-lg-7 col-md-7 col-sm-8 col-12">
                     <div class="p-5">
                         <div class="mb-3">
-                            <router-link to='/dashboard/crm'>
+                            <router-link to='/pages/profile'>
                                 <img src="/images/brand-logos/desktop-logo.png" alt=""
                                     class="authentication-brand desktop-logo">
                                 <img src="/images/brand-logos/desktop-dark.png" alt=""
@@ -75,7 +75,7 @@ export default {
                                 </div>
                             </div>
                             <div class="col-xl-12 d-grid">
-                                <router-link to='/dashboard/crm' class="btn btn-lg btn-primary">Verify</router-link>
+                                <router-link to='/pages/profile' class="btn btn-lg btn-primary">Verify</router-link>
                             </div>
                         </div>
                         <div class="text-center">

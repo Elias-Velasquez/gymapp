@@ -287,15 +287,15 @@
                             <small class="text-muted text-center d-block">{{ auth.user }}</small>
                             
                             <!-- Rol -->
-                            <span v-if="auth.role == 'ROLE_ADMIN'" class="op-7 fw-normal text-center d-block fs-11 badge bg-info" >Administrador</span> 
-                            <span v-else-if="auth.role == 'ROLE_USER'" class="op-7 fw-normal color-info d-block text-center fs-11 badge bg-info">Cliente</span> 
+                            <span v-if="auth.role == 'ROLE_ADMIN'" style="background-color: rgb(0, 109, 254)!important;" class="op-7 fw-normal text-center d-block fs-11 badge bg-info" >Administrador</span> 
+                            <span v-else-if="auth.role == 'ROLE_USER'" style="background-color: rgb(0, 109, 254)!important;" class="op-7 fw-normal color-info d-block text-center fs-11 badge bg-info">Cliente</span> 
                         </div> 
                     </div> 
                 </a> <!-- End::header-link|dropdown-toggle --> 
                 <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile" style=""> 
                     <li><router-link class="dropdown-item d-flex" to="/pages/profile"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Mi Perfil</router-link></li> 
-                     <li><router-link class="dropdown-item d-flex border-block-end" to="/pages/to-do-list"><i class="ti ti-clipboard-check fs-18 me-2 op-7"></i>Gestor de tareas</router-link></li> 
-                    <li><router-link class="dropdown-item d-flex" to="/pages/email/mail-settings"><i class="ti ti-adjustments-horizontal fs-18 me-2 op-7"></i>Configuración</router-link></li> 
+                     <!-- <li><router-link class="dropdown-item d-flex border-block-end" to="/pages/to-do-list"><i class="ti ti-clipboard-check fs-18 me-2 op-7"></i>Gestor de tareas</router-link></li> 
+                    <li><router-link class="dropdown-item d-flex" to="/pages/email/mail-settings"><i class="ti ti-adjustments-horizontal fs-18 me-2 op-7"></i>Configuración</router-link></li>  -->
                     <li><a class="dropdown-item d-flex" href="javascript:void(0);" @click="handleLogout">
                             <i class="ti ti-logout fs-18 me-2 op-7"></i>Salir
                         </a>
@@ -432,8 +432,6 @@ export default {
             },
 
            displayName() {
-                console.log(this.auth.userData, 'auth')
-                
 
                 const { nombre, apellidos, username } = this.auth.userData;
                 if (nombre && apellidos) {
@@ -571,7 +569,6 @@ export default {
     async mounted() {
         await this.auth.loadFromStorage();
 
-        console.log(this.auth, 'demo')
         document.addEventListener("fullscreenchange", this.fullscreenchanged);
     },
 }

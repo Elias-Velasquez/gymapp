@@ -1,21 +1,381 @@
+<template>
+    <!-- <PageHeader :propData="dataToPass" /> -->
+
+    <!-- Start::row-1 -->
+    <div class="row mt-4">
+        <!-- COLUMNA PRINCIPAL DEL PERFIL -->
+        <div class="col-xxl-8 col-xl-12">
+            <div class="card elegant-profile-card">
+                <!-- HEADER DEL PERFIL -->
+                <div class="card-header elegant-profile-header">
+                    <div class="profile-cover-content">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <img :src="userProfile?.imagen || '/assets/default-avatar.png'" :alt="userProfile?.nombre">
+                                <div class="status-indicator" :class="userProfile?.enabled ? 'online' : 'offline'"></div>
+                            </div>
+                            <div class="user-details">
+                                <h3 class="user-name text-white">{{ userProfile?.nombre }} {{ userProfile?.apellidos }}</h3>
+                                <p class="user-email">{{ userProfile?.username }}</p>
+                                <div class="user-meta">
+                                    <span class="meta-item">
+                                        <i class="ri-id-card-line"></i>
+                                        {{ userProfile?.dni }}
+                                    </span>
+                                    <span class="meta-item">
+                                        <i class="ri-map-pin-line"></i>
+                                        {{ userProfile?.direccion || 'Sin dirección' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button 
+                                class="btn elegant-btn-light"
+                                @click="$router.push(mode === 'self' 
+                                    ? { path: '/pages/edit-profile' } 
+                                    : { path: '/pages/edit-profile', query: { mode: 'admin' } })"
+                            >
+                                <i class="ri-edit-line me-2"></i>
+                                Editar Perfil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESTADÍSTICAS DEL USUARIO -->
+                <div class="card-body p-0">
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon peso">
+                                <i class="ri-scales-3-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>{{ userProfile?.peso }} kg</h4>
+                                <p>Peso actual</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon altura">
+                                <i class="ri-ruler-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>{{ userProfile?.altura }} m</h4>
+                                <p>Altura</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon accesos">
+                                <i class="ri-door-open-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>{{ userProfile?.contrato?.accesos || 0 }}</h4>
+                                <p>Accesos totales</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon sesiones">
+                                <i class="ri-calendar-check-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>{{ userProfile?.contrato?.sesiones || 0 }}</h4>
+                                <p>Sesiones</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA DE INFORMACIÓN ADICIONAL -->
+        <div class="col-xxl-4 col-xl-12">
+            <!-- INFORMACIÓN DEL CONTRATO -->
+            <div class="card elegant-info-card">
+                <div class="card-header elegant-card-header">
+                    <div class="header-title">
+                        <i class="ri-file-text-line"></i>
+                        <span>Contrato Actual</span>
+                    </div>
+                    <button 
+                        class="btn elegant-btn-primary-sm"
+                        @click="openContractModal"
+                        data-bs-toggle="modal"
+                        data-bs-target="#contractModal"
+                    >
+                        <i class="ri-add-line me-1"></i>
+                        Agregar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div v-if="userProfile?.contrato" class="contract-details">
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="ri-bookmark-line"></i>
+                                Tipo
+                            </div>
+                            <div class="detail-value">{{ userProfile.contrato.tipoContrato }}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="ri-calendar-check-line"></i>
+                                Inicio
+                            </div>
+                            <div class="detail-value">{{ formatDate(userProfile.contrato.fechaInicio) }}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="ri-calendar-close-line"></i>
+                                Fin
+                            </div>
+                            <div class="detail-value">{{ formatDate(userProfile.contrato.fechaFin) }}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="ri-time-line"></i>
+                                Último acceso
+                            </div>
+                            <div class="detail-value">{{ formatDateTime(userProfile.contrato.ultimoAcceso) }}</div>
+                        </div>
+                    </div>
+                    
+                    <div v-else class="no-contract">
+                        <i class="ri-file-forbid-line"></i>
+                        <p>Sin contrato activo</p>
+                        <small>Agrega un contrato para comenzar</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OBSERVACIONES -->
+            <div class="card elegant-info-card" v-if="userProfile?.observaciones">
+                <div class="card-header elegant-card-header">
+                    <div class="header-title">
+                        <i class="ri-sticky-note-line"></i>
+                        <span>Observaciones</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="observations-text">{{ userProfile.observaciones }}</p>
+                </div>
+            </div>
+
+            <!-- INFORMACIÓN ADICIONAL -->
+            <div class="card elegant-info-card">
+                <div class="card-header elegant-card-header">
+                    <div class="header-title">
+                        <i class="ri-information-line"></i>
+                        <span>Información del Sistema</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="ri-calendar-line"></i>
+                            Registro
+                        </div>
+                        <div class="detail-value">{{ formatDate(userProfile?.createdAt) }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="ri-time-line"></i>
+                            Último login
+                        </div>
+                        <div class="detail-value">{{ formatDateTime(userProfile?.last_login) }}</div>
+                    </div>
+                    
+                    <div class="detail-row" v-if="mode === 'self' && userProfile?.roles?.[0]">
+                        <div class="detail-label">
+                            <i class="ri-shield-user-line"></i>
+                            Rol
+                        </div>
+                        <div class="detail-value">{{ userProfile.roles[0].name }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA AGREGAR CONTRATO -->
+    <div class="modal fade" id="contractModal" tabindex="-1" aria-labelledby="contractModalLabel" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content elegant-modal">
+                <!-- HEADER -->
+                <div class="modal-header elegant-header">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="ri-file-add-line"></i>
+                        </div>
+                        <div class="header-text">
+                            <h5 class="modal-title mb-0">Agregar Nuevo Contrato</h5>
+                            <small class="text-white-50">Para {{ userProfile?.nombre }} {{ userProfile?.apellidos }}</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body elegant-body">
+                    <div class="container-fluid">
+                        <div class="row g-4">
+                            
+                            <!-- TIPO DE CONTRATO -->
+                            <div class="col-12">
+                                <div class="elegant-input-group">
+                                    <label class="elegant-label">
+                                        <i class="ri-bookmark-line"></i>
+                                        Tipo de Contrato *
+                                    </label>
+                                    <select 
+                                        v-model="contractForm.tipoContratoId" 
+                                        :class="`elegant-input ${getContractErrorClass('tipoContratoId')}`"
+                                        :disabled="loadingContractTypes || isSubmittingContract"
+                                    >
+                                        <option value="">Selecciona un tipo de contrato</option>
+                                        <option 
+                                            v-for="tipo in contractTypes" 
+                                            :key="tipo.id" 
+                                            :value="tipo.id"
+                                        >
+                                            {{ tipo.label }}
+                                        </option>
+                                    </select>
+                                    <div v-if="contractFormErrors.tipoContratoId" class="elegant-error">
+                                        <i class="ri-error-warning-line"></i>
+                                        {{ contractFormErrors.tipoContratoId }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FECHAS -->
+                            <div class="col-md-6">
+                                <div class="elegant-input-group">
+                                    <label class="elegant-label">
+                                        <i class="ri-calendar-check-line"></i>
+                                        Fecha de Inicio *
+                                    </label>
+                                    <input 
+                                        type="date" 
+                                        v-model="contractForm.fechaInicio"
+                                        :class="`elegant-input ${getContractErrorClass('fechaInicio')}`"
+                                        :disabled="isSubmittingContract"
+                                    >
+                                    <div v-if="contractFormErrors.fechaInicio" class="elegant-error">
+                                        <i class="ri-error-warning-line"></i>
+                                        {{ contractFormErrors.fechaInicio }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="elegant-input-group">
+                                    <label class="elegant-label">
+                                        <i class="ri-calendar-close-line"></i>
+                                        Fecha de Fin *
+                                    </label>
+                                    <input 
+                                        type="date" 
+                                        v-model="contractForm.fechaFin"
+                                        :class="`elegant-input ${getContractErrorClass('fechaFin')}`"
+                                        :disabled="isSubmittingContract"
+                                    >
+                                    <div v-if="contractFormErrors.fechaFin" class="elegant-error">
+                                        <i class="ri-error-warning-line"></i>
+                                        {{ contractFormErrors.fechaFin }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ACCESOS Y SESIONES -->
+                            <div class="col-md-6">
+                                <div class="elegant-input-group">
+                                    <label class="elegant-label">
+                                        <i class="ri-door-open-line"></i>
+                                        Accesos *
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        v-model.number="contractForm.accesos"
+                                        :class="`elegant-input ${getContractErrorClass('accesos')}`"
+                                        placeholder="Número de accesos"
+                                        min="1"
+                                        :disabled="isSubmittingContract"
+                                    >
+                                    <div v-if="contractFormErrors.accesos" class="elegant-error">
+                                        <i class="ri-error-warning-line"></i>
+                                        {{ contractFormErrors.accesos }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="elegant-input-group">
+                                    <label class="elegant-label">
+                                        <i class="ri-calendar-check-line"></i>
+                                        Sesiones *
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        v-model.number="contractForm.sesiones"
+                                        :class="`elegant-input ${getContractErrorClass('sesiones')}`"
+                                        placeholder="Número de sesiones"
+                                        min="1"
+                                        :disabled="isSubmittingContract"
+                                    >
+                                    <div v-if="contractFormErrors.sesiones" class="elegant-error">
+                                        <i class="ri-error-warning-line"></i>
+                                        {{ contractFormErrors.sesiones }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer elegant-footer">
+                    <button type="button" class="btn elegant-btn-secondary" data-bs-dismiss="modal">
+                        <i class="ri-close-line me-2"></i>
+                        Cancelar
+                    </button>
+                    <button 
+                        type="button" 
+                        class="btn btn-custom"  
+                        @click="submitContract"
+                        :disabled="isSubmittingContract"
+                    >
+                        <span v-if="isSubmittingContract" class="spinner-border spinner-border-sm me-2"></span>
+                        <i v-else class="ri-file-add-line me-2"></i>
+                        {{ isSubmittingContract ? 'Creando...' : 'Crear Contrato' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End::row-1 -->
+</template>
+
 <script lang="ts">
 import PageHeader from "../../shared/components/pageheader/pageheader.vue";
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/style.css';
-
-import ProfileCardComponent from '../../shared/components/@spk/pages/profile-cards.vue';
-import Activities from "../../shared/components/@spk/activities.vue";
 import { useAuthStore } from '../../stores/auth.js';
 import { useUserStore } from '../../stores/users';
+import { Modal } from "bootstrap";
+import axios from "axios";
+
+// Importar SweetAlert2
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 export default {
     components: {
-        PageHeader, ProfileCardComponent, Activities
+        PageHeader
     },
     data() {
         return {
             mode: 'self',
-            // userProfile: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null,
             userProfile: {
                 username: '',
                 roles: [],
@@ -24,342 +384,870 @@ export default {
                 altura: '',
                 last_login: '',
                 contrato: {}
-                },
+            },
             dataToPass: {
-                current: "Mis Datos",
-                // list: ['Pages', 'Profile']
+                current: "Perfil",
             },
-            lightbox: null,
-
-            profileDetails: {
-                bio: `I am <b class="text-default">Sonya Taylor,</b> here by conclude that,i am the founder and managing director of the prestigeous company name laugh at all and acts as the cheif executieve officer of the company.`,
-                contactInformation: [
-                    { icon: "mail", title: "sonyataylor2531@gmail.com" },
-                    { icon: "phone", title: "+(555) 555-1234" },
-                    { icon: "map-pin", title: "MIG-1-11, Monroe Street, Georgetown, Washington D.C, USA,20071" },
-                ],
-                personalInformation: { Name: "Sonya Taylor", Email: "sonyataylor2531@gmail.com", Phone: "+(555) 555-1234", Designation: "C.E.O", Age: "28", Experience: "10 Years", },
-                links: [{ name: "https://www.spruko.com/", links: "https://www.spruko.com/" }, { name: "https://themeforest.net/user/spruko/portfolio", links: "https://themeforest.net/user/spruko/portfolio" }],
-                socialMedia: [
-                    { name: "facebook", links: "", icon: "facebook", iconColor: "primary" },
-                    { name: "twitter", links: "", icon: "twitter-x", iconColor: "secondary" },
-                    { name: "instagram", links: "", icon: "instagram", iconColor: "warning" },
-                    { name: "github", links: "", icon: "github", iconColor: "success" },
-                    { name: "youtube", links: "", icon: "youtube", iconColor: "danger" },
-                ],
-                followers: [
-                    { name: "Contrato base Enero 2025", email: "2025-01-05 13:29:00" },
-                    { name: "Contrato base Junio 2025", email: "2025-06-05 14:05:00"},
-                    { name: "Cambio de Contrato Vip", email: "2025-08-05 15:19:00"},
-                ],
-                suggestions: [
-                    { name: "Alister"},
-                    { name: "Samantha Sams"},
-                    { name: "Jason Mama"},
-                    { name: "Alicia Sierra" },
-                    { name: "Kiara Advani" },
-                ],
-                skills: ["Cloud computing", "Data analysis", "DevOps", "Machine learning", "Programming", "Security", "Python", "JavaScript", "Ruby", "PowerShell", "Statistics", "SQL"],
-
+            contractTypes: [],
+            loadingContractTypes: false,
+            isSubmittingContract: false,
+            contractForm: {
+                tipoContratoId: '',
+                fechaInicio: '',
+                fechaFin: '',
+                accesos: 1,
+                sesiones: 1,
+                estadoContratoId: 1
             },
-            profile: [
-                { id: 1, name: 'Samantha May', email: 'samanthamay2912@gmail.com', role: 'Team Member', color: "info" },
-                { id: 2, name: 'Andrew Garfield', email: 'andrewgarfield98@gmail.com', role: 'Team Lead', color: "success" },
-                { id: 3, name: 'Jessica Cashew', email: 'jessicacashew143@gmail.com', role: 'Team Member', color: "info" },
-                { id: 4, name: 'Simon Cowan', email: 'jessicacashew143@gmail.com', role: 'Team Manager', color: "warning" },
-                { id: 5, name: 'Amanda Nunes', email: 'amandanunes45@gmail.com', role: 'Team Member', color: "info" },
-                { id: 6, name: 'Mahira Hose', email: 'mahirahose9456@gmail.com', role: 'Team Member', color: "info" },
-            ],
-            recentPosts: [
-                { id: 1, size: "md", title: "Animals", description: "There are many variations of passages of Lorem Ipsum available", },
-                { id: 2, size: "md", title: "Travel", description: "Latin words, combined with a handful of model sentence", },
-                { id: 3, size: "md", title: "Interior", description: "Contrary to popular belief, Lorem Ipsum is not simply random", },
-                { id: 4, size: "md", title: "Nature", description: " It is a long established fact that a reader will be distracted by the readable content", },
-            ],
-            activitys: [
-                { id: 1, avatar: "E", avatarColor: 'primary', img: "", description: "<p class='mb-2'><b>You</b> Commented on <b>alexander taylor</b> post <a class='text-secondary' href='javascript:void(0);'><u>#beautiful day</u></a>.<span class='float-end fs-11 text-muted'>24,Dec 2022 - 14:34</span></p>", classimg: "me-2", avatarList: [] },
-                { id: 2, avatar: "",  description: "<p class='text-muted mb-2'><span class='text-default'><b>Json Smith</b> reacted to the post &#128077;</span>.<span class='float-end fs-11 text-muted'>18,Dec 2022 - 12:16</span></p><p class='text-muted mb-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit.Repudiandae, repellendus rem rerum excepturi aperiam ipsam temporibus inventore ullam tempora eligendi libero sequi dignissimos cumque, et a sint tenetur consequatur omnis!</p>", media: [], avatarList: [] },
-                { id: 3, avatar: "", description: "<p class='text-muted mb-2'><span class='text-default'><b>Alicia Keys</b> shared a document with <b>you</b></span>.<span class='float-end fs-11 text-muted'>21,Dec 2022 - 15:32</span></p>",  avatarList: [], },
-                { id: 4, avatar: "P", avatarColor: 'success', img: "", description: "<p class='text-muted mb-2'><span class='text-default'><b>You</b> shared a post with 4 people <b>Simon,Sasha,Anagha,Hishen</b></span>.<span class='float-end fs-11 text-muted'>28,Dec 2022 - 18:46</span></p>"},
-                { id: 5, avatar: "", description: "<p class='text-muted mb-1'><span class='text-default'><b>Melissa Blue</b> liked your post <b>travel excites</b></span>.<span class='float-end fs-11 text-muted'>11,Dec 2022 - 11:18</span></p><p class='text-muted'>you are already feeling the tense atmosphere of the video playing in the background</p>", classimg: "me-2", avatarList: [] },
-                { id: 6, avatar: "", description: "<p class='mb-1'><b>You</b> Commented on <b>Peter Engola</b> post <a class='text-secondary' href='javascript:void(0);'><u>#Mother Nature</u></a>.<span class='float-end fs-11 text-muted'>24,Dec 2022 - 14:34</span></p><p class='text-muted'>Technology id developing rapidly kepp uo your work &#128076;</p>", classimg: "me-2", avatarList: [] },
-            ],
-            posts: [
-                { id: 1, avatar: "", username: "sonya taylor", date: "24, Dec - 04:32PM", message: "<p class='fs-12 text-muted mb-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p><p class='fs-12 text-muted mb-3'>As opposed to using 'Content here &#128076;</p>", media: [], type: "Fashion", typeBg: "primary", avatarList: [] },
-                { id: 2, avatar: "", username: "sonya taylor", date: "26, Dec - 12:45PM", message: "<p class='fs-12 text-muted mb-1'>Shared pictures with 4 of friends <span>Hiren,Sasha,Biden,Thara</span>.</p>", type: "Nature", typeBg: "success" },
-                { id: 3, avatar: "", username: "sonya taylor", date: "29, Dec - 09:53AM", message: "<p class='fs-12 text-muted mb-1'>Sharing an article that excites me about nature more than what i thought. </p><p class='mb-3 profile-post-link'><a href='javascript:void(0);' class='fs-12 text-primary'><u>https://www.discovery.com/nature/caring-for-coral</u></a></p>", media: "", type: "Travel", typeBg: "secondary", avatarList: [] },
-                { id: 4, avatar: "", username: "sonya taylor", date: "22, Dec - 11:22PM", message: "<p class='fs-12 text-muted mb-1'>Shared pictures with 3 of your friends <span>Maya,Jacob,Amanda</span>.</p>", type: "Nature", typeBg: "success" },
-                { id: 5, avatar: "", username: "sonya taylor", date: "18, Dec - 12:28PM", message: "<p class='fs-12 text-muted mb-1'>Followed this author for top class themes with best code you can get in the  market.</p> <p class='mb-3 profile-post-link'><a href='https://themeforest.net/user/spruko/portfolio' target='_blank' class='fs-12 text-primary'><u>https://themeforest.net/user/spruko/portfolio</u></a></p>", media: "", type: "Travel", typeBg: "secondary", avatarList: [] },
-                { id: 6, avatar: "", username: "sonya taylor", date: "02, Dec - 06:32AM", message: "<p class='fs-12 text-muted mb-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p><p class='fs-12 text-muted mb-3'>There are many variations of passages &#128079;&#128525;</p>", media: "", type: "Fashion", typeBg: "primary", avatarList: [] },
-            ]
+            contractFormErrors: {}
         };
     },
     computed: {
         authStore() {
             return useAuthStore();
         },
-         userStore() {
+        userStore() {
             return useUserStore();
         }
     },
     async mounted() {
-       
         await this.authStore.loadFromStorage();
-        // this.userProfile = this.authStore.userData;
+        
+        // Obtener el modo desde la query
         this.mode = this.$route.query.mode || 'self';
 
-
-        if (this.mode === 'admin' && this.userStore.selectedUser) {
-            // Modo admin → usamos el usuario seleccionado
-            this.userProfile = this.userStore.selectedUser;
-          
+        if (this.mode === 'admin') {
+            // Modo admin: intentar usar el usuario seleccionado
+            if (this.userStore.selectedUser) {
+                this.userProfile = this.userStore.selectedUser;
+            } else {
+                // Si no hay usuario seleccionado, redirigir a la tabla de usuarios
+                console.warn('No selected user found, redirecting to users table');
+                this.$router.push('/pages/users');
+                return;
+            }
         } else {
-            // Modo self → usamos el userData (store o localStorage como fallback)
+            // Modo self: usar datos del usuario autenticado
             this.userProfile = this.authStore.userData 
                 || (localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null);
-           
-       }
-    },
-    unmounted() {
-        if (this.lightbox) {
-            this.lightbox.destroy();
-            this.lightbox = null;
+        }
+
+        // Verificar que tenemos datos válidos
+        if (!this.userProfile) {
+            console.error('No user profile data available');
+            this.$router.push('/pages/users');
         }
     },
+    methods: {
+        // NOTIFICACIONES SWEETALERT2
+        showSuccessNotification(title, message, footerText = null) {
+            return Swal.fire({
+                icon: 'success',
+                title: title,
+                text: message,
+                footer: footerText ? `<span class="text-success"><i class="ri-information-line me-1"></i>${footerText}</span>` : null,
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'Perfecto',
+                timer: 4000,
+                timerProgressBar: true,
+                allowOutsideClick: false
+            });
+        },
+
+        showErrorNotification(title, message, footerText = null) {
+            return Swal.fire({
+                icon: 'error',
+                title: title,
+                text: message,
+                footer: footerText ? `<span class="text-danger"><i class="ri-error-warning-line me-1"></i>${footerText}</span>` : null,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Entendido',
+                allowOutsideClick: false
+            });
+        },
+
+        showLoadingAlert(title, message) {
+            Swal.fire({
+                title: title,
+                text: message,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+
+        // MÉTODO PARA ABRIR MODAL DE CONTRATO
+        async openContractModal() {
+            await this.fetchContractTypes();
+            this.resetContractForm();
+        },
+
+        // OBTENER TIPOS DE CONTRATO
+        async fetchContractTypes() {
+            if (this.contractTypes.length > 0) return; // Ya los tenemos
+            const token = localStorage.getItem('token')
+            this.loadingContractTypes = true;
+            try {
+                const response = await axios.get('http://69.62.111.126:8080/api/contratos/tipos_contrato', {
+                    headers: {
+                    Authorization: `Bearer ${token}`
+                    }
+                });
+                this.contractTypes = response.data;
+            } catch (error) {
+                console.error('Error fetching contract types:', error);
+                this.showErrorNotification(
+                    'Error al cargar tipos de contrato',
+                    'No se pudieron obtener los tipos de contrato disponibles',
+                    'Inténtalo nuevamente'
+                );
+            } finally {
+                this.loadingContractTypes = false;
+            }
+        },
+
+        // VALIDAR FORMULARIO DE CONTRATO
+        validateContractForm() {
+            this.contractFormErrors = {};
+            let isValid = true;
+
+            // Tipo de contrato
+            if (!this.contractForm.tipoContratoId) {
+                this.contractFormErrors.tipoContratoId = 'Selecciona un tipo de contrato';
+                isValid = false;
+            }
+
+            // Fecha de inicio
+            if (!this.contractForm.fechaInicio) {
+                this.contractFormErrors.fechaInicio = 'La fecha de inicio es requerida';
+                isValid = false;
+            }
+
+            // Fecha de fin
+            if (!this.contractForm.fechaFin) {
+                this.contractFormErrors.fechaFin = 'La fecha de fin es requerida';
+                isValid = false;
+            } else if (this.contractForm.fechaInicio && this.contractForm.fechaFin <= this.contractForm.fechaInicio) {
+                this.contractFormErrors.fechaFin = 'La fecha de fin debe ser posterior a la de inicio';
+                isValid = false;
+            }
+
+            // Accesos
+            if (!this.contractForm.accesos || this.contractForm.accesos < 1) {
+                this.contractFormErrors.accesos = 'Debe tener al menos 1 acceso';
+                isValid = false;
+            }
+
+            // Sesiones
+            if (!this.contractForm.sesiones || this.contractForm.sesiones < 1) {
+                this.contractFormErrors.sesiones = 'Debe tener al menos 1 sesión';
+                isValid = false;
+            }
+
+            return isValid;
+        },
+
+        // ENVIAR CONTRATO
+        async submitContract() {
+            if (this.isSubmittingContract) return;
+
+            // Validar formulario
+            if (!this.validateContractForm()) {
+                this.showErrorNotification(
+                    'Formulario incompleto',
+                    'Por favor corrige los errores marcados en el formulario',
+                    'Revisa que todos los campos estén correctos'
+                );
+                return;
+            }
+
+            this.isSubmittingContract = true;
+
+            try {
+                // Mostrar loading
+                this.showLoadingAlert(
+                    'Creando contrato...',
+                    'Por favor espera mientras procesamos la información'
+                );
+
+                const contractData = {
+                    tipoContratoId: this.contractForm.tipoContratoId,
+                    fechaInicio: this.contractForm.fechaInicio + 'T00:00:00',
+                    fechaFin: this.contractForm.fechaFin + 'T23:59:59',
+                    accesos: this.contractForm.accesos,
+                    sesiones: this.contractForm.sesiones,
+                    estadoContratoId: 1
+                };
+
+                const token = localStorage.getItem('token')
+                const response = await axios.post(
+                    `http://69.62.111.126:8080/api/contratos/${this.userProfile.username}`,
+                    contractData,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                );
+
+                // Cerrar modal
+                this.closeContractModal();
+
+                // Cerrar loading y mostrar éxito
+                Swal.close();
+                await this.showSuccessNotification(
+                    '¡Contrato creado exitosamente!',
+                    `Se ha creado el contrato para ${this.userProfile.nombre} ${this.userProfile.apellidos}`,
+                    'El contrato ya está activo'
+                );
+
+                // Recargar datos del usuario
+                if (this.mode === 'admin') {
+                    // En modo admin, actualizar el usuario en el store
+                    await this.userStore.getUsers();
+                    const updatedUser = this.userStore.user.find(u => u.username === this.userProfile.username);
+                    if (updatedUser) {
+                        this.userProfile = updatedUser;
+                        this.userStore.selectedUser = updatedUser;
+                    }
+                } else {
+                    // En modo self, recargar datos del usuario autenticado
+                    await this.authStore.loadFromStorage();
+                    this.userProfile = this.authStore.userData;
+                }
+
+            } catch (err) {
+                console.error('Error creating contract:', err);
+                
+                // Cerrar loading y mostrar error
+                Swal.close();
+                
+                let errorMessage = 'No se pudo crear el contrato. Inténtalo nuevamente.';
+                let footerMessage = 'Verifica tu conexión a internet';
+
+                if (err.response?.status === 400) {
+                    errorMessage = 'Los datos del contrato no son válidos';
+                    footerMessage = 'Revisa las fechas y valores ingresados';
+                } else if (err.response?.status === 409) {
+                    errorMessage = 'El usuario ya tiene un contrato activo';
+                    footerMessage = 'Finaliza el contrato actual antes de crear uno nuevo';
+                } else if (err.response?.status === 500) {
+                    errorMessage = 'Error interno del servidor';
+                    footerMessage = 'Contacta al administrador del sistema';
+                }
+
+                this.showErrorNotification(
+                    'Error al crear contrato',
+                    errorMessage,
+                    footerMessage
+                );
+
+            } finally {
+                this.isSubmittingContract = false;
+            }
+        },
+
+        // CERRAR MODAL DE CONTRATO
+        closeContractModal() {
+            const modalEl = document.getElementById("contractModal");
+            if (modalEl) {
+                const modal = Modal.getInstance(modalEl) || new Modal(modalEl);
+                modal.hide();
+                const backdrop = document.querySelector(".modal-backdrop");
+                if (backdrop) backdrop.remove();
+                document.body.classList.remove("modal-open");
+                document.body.style.removeProperty("overflow");
+                document.body.style.removeProperty("padding-right");
+            }
+        },
+
+        // RESETEAR FORMULARIO DE CONTRATO
+        resetContractForm() {
+            this.contractForm = {
+                tipoContratoId: '',
+                fechaInicio: '',
+                fechaFin: '',
+                accesos: 1,
+                sesiones: 1,
+                estadoContratoId: 1
+            };
+            this.contractFormErrors = {};
+        },
+
+        // OBTENER CLASE DE ERROR PARA CONTRATO
+        getContractErrorClass(field) {
+            return this.contractFormErrors[field] ? 'is-invalid' : '';
+        },
+
+        // FORMATEAR FECHAS
+        formatDate(dateString) {
+            if (!dateString) return 'No especificada';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return 'Fecha inválida';
+            }
+        },
+
+        formatDateTime(dateString) {
+            if (!dateString) return 'No registrado';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleString('es-ES', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (error) {
+                return 'Fecha inválida';
+            }
+        }
+    }
 };
 </script>
 
-<template>
-    <PageHeader :propData="dataToPass" />
+<style scoped>
+/* CARD PRINCIPAL ELEGANTE */
+.elegant-profile-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
 
-    <!-- Start::row-1 -->
-    <div class="row">
-        <div class="col-xxl-4 col-xl-12">
-            <div class="card custom-card overflow-hidden">
-                <div class="card-body p-0">
-                    <div class="d-sm-flex align-items-top p-4 border-bottom-0 main-profile-cover">
-                        <!-- <div>
-                            <span class="avatar avatar-xxl avatar-rounded online me-3">
-                                <img src="/images/faces/9.jpg" alt="">
-                            </span>
-                        </div> -->
-                        <div class="flex-fill main-profile-info">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-semibold mb-1 text-fixed-white">{{this.userProfile?.username}} <i :class="`ri-id-card-line align-middle fw-normal fs-25`"></i></h6>
-                                <button 
-                                    class="btn btn-light btn-wave"
-                                    @click="$router.push(mode === 'self' 
-                                        ? { path: '/pages/edit-profile' } 
-                                        : { path: '/pages/edit-profile', query: { mode: 'admin' } })"
-                                    >
-                                    <i class="ri-edit-line me-1 align-middle"></i>Editar Perfil
-                                    </button>
-                            </div>
-                            <p class="mb-1 text-muted text-fixed-white op-7">{{this.userProfile?.roles[0]?.name}}</p>
-                            <p class="fs-12 text-fixed-white mb-4 op-5">
-                                <span class="me-3"><i class="ri-building-line me-1 align-middle"></i>{{this.userProfile?.dni}}</span>
-                                <span><i class="ri-map-pin-line me-1 align-middle"></i>{{this.userProfile?.direccion}}</span>
-                            </p>
-                            <div class="d-flex mb-0">
-                                <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.peso}} <i :class="`ri-weight-line fw-normal align-middle fs-18`"></i></p>
-                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Peso</p>
-                                </div>
-                                <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.altura}} <i :class="`ri-expand-height-line fw-normal align-middle fs-18`"></i></p>
-                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Altura</p>
-                                </div>
-                                <div class="me-4">
-                                    <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">{{this.userProfile?.last_login}} <i :class="`ri-pass-valid-line fw-normal align-middle fs-18`"></i> </p>
-                                    <p class="mb-0 fs-11 op-5 text-fixed-white">Ultima Sesión</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4 border-bottom border-block-end-dashed">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <p class="fs-15 mb-2 me-4 fw-semibold">Contrato Actual:</p>
-                            <button 
-                                    class="btn btn-light btn-wave"
-                                    >
-                                    <i class="ri-file-add-line me-1 align-middle"></i>Agregar contracto
-                                    </button>
-                        </div>
-                        
-                        <div class="text-muted">
-                            <p class="mb-2">
-                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-contract-line align-middle fs-14`"></i>
-                                </span>
-                                Tipo de contrato - {{ this.userProfile?.contrato?.tipoContrato }}
-                            </p>
-                        </div>
-                         <div class="text-muted">
-                            <p class="mb-2">
-                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-alert-line align-middle fs-14`"></i>
-                                </span>
-                                Estado de contrato - {{ this.userProfile?.contrato?.estadoContratoId }}
-                            </p>
-                        </div>
-                         <div class="text-muted">
-                            <p class="mb-2">
-                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-arrow-up-box-line align-middle fs-14`"></i>
-                                </span>
-                                Accesos - {{ this.userProfile?.contrato?.accesos }}
-                            </p>
-                        </div>
+/* HEADER DEL PERFIL */
+.elegant-profile-header {
+    background: linear-gradient(135deg, #111c43 0%, rgb(0, 109, 254) 100%);
+    border: none;
+    padding: 2rem;
+    position: relative;
+}
 
-                         <div class="text-muted">
-                            <p class="mb-2">
-                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-pass-valid-line align-middle fs-14`"></i>
-                                </span>
-                                Sesiones - {{ this.userProfile?.contrato?.sesiones }}
-                            </p>
-                        </div>
+.elegant-profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
 
-                         <div class="text-muted">
-                            <p class="mb-2">
-                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-calendar-check-fill align-middle fs-14`"></i>
-                                </span>
-                                Fecha de Inicio - {{ this.userProfile?.contrato?.fechaInicio }}
-                            </p>
-                        </div>
+.profile-cover-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+}
 
-                        <div class="text-muted">
-                            <p class="mb-2">
-                                <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
-                                    <i :class="`ri-calendar-close-fill align-middle fs-14`"></i>
-                                </span>
-                                Fecha de Fin - {{ this.userProfile?.contrato?.fechaFin }}
-                            </p>
-                        </div>
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
 
-                    </div>
+.user-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+}
 
-                    <div class="p-4 border-bottom border-block-end-dashed">
-                        <div class="mb-4">
-                            <p class="fs-15 mb-2 fw-semibold">Observaciones:</p>
-                            <p class="fs-12 text-muted op-7 mb-0"> {{this.userProfile?.observaciones}} </p>
-                        </div>
-                    </div>
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-                    <!-- <div class="p-4">
-                        <p class="fs-15 mb-2 me-4 fw-semibold">Historial de pagos :</p>
-                        <ul class="list-group">
-                            <li class="list-group-item" v-for="(follower, index) of profileDetails.followers"
-                                :key="index">
-                                <div class="d-sm-flex align-items-top">
-                                    <span class="avatar avatar-sm">
-                                      
-                                    </span>
-                                    <div class="ms-sm-2 ms-0 mt-sm-0 mt-1 fw-semibold flex-fill">
-                                        <p class="mb-0 lh-1">{{ follower.name }}</p>
-                                        <span class="fs-11 text-muted op-7">{{ follower.email }}</span>
-                                    </div>
-                                    <button class="btn btn-light btn-wave btn-sm">Ver detalle</button>
-                                </div>
-                            </li>
-                        </ul>
-                    </div> -->
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4 col-xl-12">
-            <div class="row">
+.status-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid white;
+}
 
-                <div class="col-xl-8 col-xl-">
-                    <div class="card custom-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                Contratos
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item" v-for="(details, key) of this.userProfile?.contrato" :key="key">
-                                    
-                                    <div class="d-flex flex-wrap align-items-center">
-                                        <div class="me-2 fw-semibold">
-                                            {{ key }} :
-                                        </div>
-                                        <span class="fs-12 text-muted">{{ details }}</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="col-xl-4">
-                    <div class="card custom-card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                Entrenamientos
-                            </div>
-                            <div>
-                                <span class="badge bg-primary-transparent">Today</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item" v-for="post in recentPosts" :key="post.id">
-                                    <a href="javascript:void(0);">
-                                        <div class="d-flex flex-wrap align-items-center">
-                                            <span class="avatar avatar-md me-3">
-                               
-                                            </span>
-                                            <div class="flex-fill">
-                                                <p class="fw-semibold mb-0">{{ post.title }}</p>
-                                                <p class="mb-1 fs-12 profile-recent-posts text-truncate text-muted">
-                                                    {{ post.description }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4">
-                    <div class="card custom-card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                Nutrición
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-success-light btn-wave">View All</button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item" v-for="(suggestion, index) of profileDetails.suggestions"
-                                    :key="index">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="fw-semibold d-flex align-items-center">
-                                            <span class="avatar avatar-xs me-2">
-                                          
-                                            </span>{{ suggestion.name }}
-                                        </div>
-                                        <div>
-                                            <button class="btn btn-sm btn-icon btn-primary-light">
-                                                <i class="ri-add-line"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </div>
-    <!--End::row-1 -->
-</template>
+.status-indicator.online {
+    background: #22c55e;
+}
 
-<style scoped></style>
+.status-indicator.offline {
+    background: #ef4444;
+}
+
+.user-details {
+    color: white;
+}
+
+.user-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.user-email {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.elegant-btn-light {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.elegant-btn-light:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+/* ESTADÍSTICAS */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    padding: 2rem;
+    background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-right: 1px solid #e2e8f0;
+}
+
+.stat-item:last-child {
+    border-right: none;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-icon.peso {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.stat-icon.altura {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.stat-icon.accesos {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.stat-icon.sesiones {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.stat-info h4 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #1f2937;
+}
+
+.stat-info p {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* CARDS DE INFORMACIÓN */
+.elegant-info-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    margin-bottom: 1.5rem;
+}
+
+.elegant-card-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: none;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.header-title i {
+    font-size: 1.2rem;
+    color: #111c43;
+}
+
+.elegant-btn-primary-sm {
+    background: linear-gradient(135deg, #111c43 0%, rgb(0, 109, 254) 100%);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.elegant-btn-primary-sm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+}
+
+/* DETALLES DEL CONTRATO */
+.contract-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.detail-label i {
+    color: #111c43;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #374151;
+    text-align: right;
+}
+
+/* SIN CONTRATO */
+.no-contract {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+}
+
+.no-contract i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #d1d5db;
+}
+
+.no-contract p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.no-contract small {
+    font-size: 0.9rem;
+}
+
+/* OBSERVACIONES */
+.observations-text {
+    line-height: 1.6;
+    color: #374151;
+    margin: 0;
+}
+
+/* ESTILOS DEL MODAL */
+.elegant-modal {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.elegant-header {
+    background: linear-gradient(135deg, #111c43 0%, rgb(0, 109, 254) 100%);
+    border: none;
+    padding: 2rem;
+    position: relative;
+}
+
+.elegant-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.header-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.header-text h5 {
+    color: white;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.elegant-body {
+    padding: 2rem;
+    background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.elegant-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.elegant-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.elegant-label i {
+    color: #111c43;
+    font-size: 1.1rem;
+}
+
+.elegant-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.elegant-input:focus {
+    outline: none;
+    border-color: #111c43;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.elegant-input.is-invalid {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.elegant-input:disabled {
+    background: #f8fafc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.elegant-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(239, 68, 68, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #ef4444;
+}
+
+.elegant-footer {
+    padding: 1.5rem 2rem;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.elegant-btn-secondary {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    color: #475569;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.elegant-btn-secondary:hover:not(:disabled) {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+
+.elegant-btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.elegant-btn-success:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+}
+
+.elegant-btn-success:disabled, .elegant-btn-secondary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-custom{
+    background: linear-gradient(135deg, #111c43 0%, rgb(0, 109, 254) 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .profile-cover-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .user-avatar {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .user-name {
+        font-size: 1.5rem;
+    }
+    
+    .profile-stats {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .stat-item {
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+        justify-content: center;
+    }
+    
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+    
+    .elegant-footer {
+        flex-direction: column-reverse;
+        gap: 1rem;
+    }
+    
+    .elegant-btn-secondary,
+    .elegant-btn-success {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>

@@ -5,12 +5,12 @@
         <!-- Start::main-sidebar-header -->
         <div class="main-sidebar-header">
             <router-link  to="/dashboard/crm" class="header-logo">
-               a <img src="/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
-               b <img src="/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
-               c <img src="../../../../../assets/logo-azul.png" alt="logo" class="desktop-dark">
-               d <img src="../../../../../assets/logo-azul.png" alt="logo" class="toggle-dark">
-              e  <img src="/images/brand-logos/desktop-white.png" alt="logo" class="desktop-white">
-              f  <img src="/images/brand-logos/toggle-white.png" alt="logo" class="toggle-white">
+              <img src="/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+              <img src="/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
+              <img src="../../../../../assets/logo-azul.png" alt="logo" class="desktop-dark">
+               <img src="../../../../../assets/logo-azul.png" alt="logo" class="toggle-dark">
+              <img src="/images/brand-logos/desktop-white.png" alt="logo" class="desktop-white">
+                <img src="/images/brand-logos/toggle-white.png" alt="logo" class="toggle-white">
             </router-link>
         </div>
         <!-- End::main-sidebar-header -->

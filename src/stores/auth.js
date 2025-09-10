@@ -93,8 +93,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('role')
       localStorage.removeItem('userData')
     },
-    async getUserData(email, token) {
-      console.log('Fetching user data for:', email)  
+    async getUserData(email, token) { 
       this.loading = true
       this.error = null
       this.message = null
@@ -143,26 +142,84 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async register(formData) {
-      try {
+    try {
+        // DEBUG: Verificar token antes de enviar
+        let token = localStorage.getItem('token') || this.token;
 
-        // userJson como string
-        // formData.append("userJson", JSON.stringify(user))
+        if (!token) {
+            console.error('❌ No hay token disponible');
+            throw new Error('No hay token de autenticación disponible');
+        }
 
-        let token = await this.loginToRegister('email@email.com', '1234')
-        console.log('5')
+        // Verificar si el token está expirado
+        try {
+            const decoded = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+ 
+            if (decoded.exp < currentTime) {
+                console.error('❌ Token expirado');
+                await this.logout();
+                throw new Error('Token expirado - por favor inicia sesión nuevamente');
+            }
+        } catch (decodeError) {
+            console.error('❌ Error al decodificar token:', decodeError);
+            await this.logout();
+            throw new Error('Token inválido - por favor inicia sesión nuevamente');
+        }
+
         const { data } = await axios.post("http://69.62.111.126:8080/api/users/register", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
-        })
-        console.log('6')
-        return data
-      } catch (error) {
-        console.error("Error en register:", error)
-        throw error
-      }
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return data;
+
+    } catch (error) {
+        console.error("❌ Error en register:", error);
+        
+        // Manejo específico de errores de autenticación
+        if (error.response?.status === 403) {
+            console.error('❌ Error 403 - Token rechazado por el servidor');
+            await this.logout(); // Limpiar estado inválido
+            throw new Error('Sesión expirada - por favor inicia sesión nuevamente');
+        } else if (error.response?.status === 401) {
+            console.error('❌ Error 401 - No autorizado');
+            await this.logout();
+            throw new Error('No autorizado - por favor inicia sesión nuevamente');
+        }
+        
+        throw error;
     }
+}
   },
+  getters: {
+    isAuthenticated: (state) => {
+        const hasToken = !!state.token || !!localStorage.getItem('token');
+        const hasUser = !!state.user;
+        return hasToken && hasUser;
+    },
+    
+    getValidToken: (state) => {
+        const token = state.token || localStorage.getItem('token');
+        if (!token) return null;
+        
+        try {
+            const decoded = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+            
+            if (decoded.exp < currentTime) {
+                console.warn('Token expirado');
+                return null;
+            }
+            
+            return token;
+        } catch (error) {
+            console.error('Token inválido:', error);
+            return null;
+        }
+    }
+},
   persist: true
 })

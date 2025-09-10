@@ -35,7 +35,7 @@ export default {
             await this.auth.login(this.username, this.password);
             if (this.auth.token) {
                 if(this.auth.role === 'ROLE_ADMIN') {
-                    this.router.push('/dashboard/crm');
+                    this.router.push('/pages/profile');
                 } else {
                     this.router.push('/pages/profile');
                 }
@@ -51,7 +51,7 @@ export default {
          const role = localStorage.getItem('role');
         if (token) {
             if (role === 'ROLE_ADMIN') {
-            this.router.push('/dashboard/crm');
+            this.router.push('/pages/profile');
             } else {
             this.router.push('/pages/profile');
             }

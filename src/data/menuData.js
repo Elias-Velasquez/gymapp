@@ -1,40 +1,40 @@
 export let menuData = [
-    {
-        headTitle: 'DASHBOARD',
-        roles: ['ROLE_ADMIN'],
-    },
-    {
-        type: 'sub',
-        title: 'Paneles',
-        icon: 'bx bx-home',
-        badgeColor: 'bg-warning-transparent',
-        selected: false,
-        active: false,
-        dirchange: false,
-        roles: ['ROLE_ADMIN'],
-        children: [
+    // {
+    //     headTitle: 'DASHBOARD',
+    //     roles: ['ROLE_ADMIN'],
+    // },
+    // {
+    //     type: 'sub',
+    //     title: 'Paneles',
+    //     icon: 'bx bx-home',
+    //     badgeColor: 'bg-warning-transparent',
+    //     selected: false,
+    //     active: false,
+    //     dirchange: false,
+    //     roles: ['ROLE_ADMIN'],
+    //     children: [
 
-            {
-                path: '/dashboard/analytics',
-                type: 'link',
-                title: 'Estadísticas',
-                selected: false,
-                active: false,
-                dirchange: false,
-                roles: ['ROLE_ADMIN']
-            },
+    //         {
+    //             path: '/dashboard/analytics',
+    //             type: 'link',
+    //             title: 'Estadísticas',
+    //             selected: false,
+    //             active: false,
+    //             dirchange: false,
+    //             roles: ['ROLE_ADMIN']
+    //         },
 
-            {
-                path: '/dashboard/personal',
-                type: 'link',
-                title: 'Personal',
-                selected: false,
-                active: false,
-                dirchange: false,
-                roles: ['ROLE_ADMIN']
-            },
-        ]
-    },
+    //         {
+    //             path: '/dashboard/personal',
+    //             type: 'link',
+    //             title: 'Personal',
+    //             selected: false,
+    //             active: false,
+    //             dirchange: false,
+    //             roles: ['ROLE_ADMIN']
+    //         },
+    //     ]
+    // },
     {
         headTitle: 'GESTIÓN DE CLIENTES',
     },
@@ -57,15 +57,15 @@ export let menuData = [
                 dirchange: false,
                 roles: ['ROLE_ADMIN']
             },
-            {
-                path: '/pages/users2',
-                type: 'link',
-                title: 'Clientes2',
-                selected: false,
-                active: false,
-                dirchange: false,
-                roles: ['ROLE_ADMIN']
-            },
+            // {
+            //     path: '/pages/users2',
+            //     type: 'link',
+            //     title: 'Clientes2',
+            //     selected: false,
+            //     active: false,
+            //     dirchange: false,
+            //     roles: ['ROLE_ADMIN']
+            // },
             // {
             //     path: '/pages/about-us',
             //     type: 'link',

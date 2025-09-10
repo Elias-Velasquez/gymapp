@@ -83,6 +83,46 @@
             </div>
           </template>
 
+          <!-- SLOT ESPECIAL: Solo para tablas de tipo 'users' - Información de contrato -->
+          <template v-if="tableType === 'users'" #item-contrato="item">
+            <div class="text-start" style="min-width: 180px;">
+              <!-- Caso: Sin contrato -->
+              <div v-if="!item.contrato" class="d-flex align-items-center justify-content-center">
+                <span class="badge bg-light text-dark">
+                  <i class="ri-file-forbid-line me-1"></i>
+                  Sin contrato
+                </span>
+              </div>
+              
+              <!-- Caso: Con contrato -->
+              <div v-else>
+                <!-- Tipo de contrato -->
+                <div class="d-flex align-items-center mb-1">
+                  <i class="ri-file-text-line me-2 text-primary"></i>
+                  <span class="fw-medium fs-12">{{ item.contrato.tipoContrato }}</span>
+                </div>
+                
+                <!-- Sesiones -->
+                <div class="d-flex align-items-center mb-1">
+                  <i class="ri-calendar-check-line me-2 text-success"></i>
+                  <small class="text-muted">{{ item.contrato.sesiones }} sesiones</small>
+                </div>
+                
+                <!-- Accesos utilizados -->
+                <div class="d-flex align-items-center mb-1">
+                  <i class="ri-door-open-line me-2 text-info"></i>
+                  <small class="fw-medium text-info">{{ item.contrato.accesos }} accesos</small>
+                </div>
+                
+                <!-- Último acceso -->
+                <div class="d-flex align-items-center">
+                  <i class="ri-time-line me-2 text-warning"></i>
+                  <small class="text-muted">{{ formatContractDate(item.contrato.ultimoAcceso) }}</small>
+                </div>
+              </div>
+            </div>
+          </template>
+
           <!-- SLOT GENÉRICO: Para cualquier campo 'status' -->
           <template #item-status="item">
             <span 
@@ -126,14 +166,14 @@
               </a>
 
               <!-- Toggle estado (solo para usuarios) -->
-              <a v-if="tableType === 'users'" 
+              <!-- <a v-if="tableType === 'users'" 
                  href="javascript:void(0);" 
                  :class="`btn btn-icon btn-sm rounded-pill ${item.enabled ? 'btn-warning-transparent' : 'btn-success-transparent'}`"
                  @click="$emit('toggleStatus', item)"
                  data-bs-toggle="tooltip" 
                  :title="item.enabled ? 'Desactivar' : 'Activar'">
                 <i :class="item.enabled ? 'ri-pause-circle-line' : 'ri-play-circle-line'"></i>
-              </a>
+              </a> -->
 
               <!-- Eliminar -->
               <a href="javascript:void(0);" 
@@ -235,6 +275,27 @@ export default defineComponent({
       return `Hace ${Math.floor(diffDays / 30)} meses`;
     };
 
+    const formatContractDate = (dateString: string) => {
+      if (!dateString) return 'Sin registro';
+      
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 3600 * 24));
+      
+      if (diffDays === 0) return 'Hoy';
+      if (diffDays === 1) return 'Ayer';
+      if (diffDays < 7) return `Hace ${diffDays} días`;
+      if (diffDays < 30) return `Hace ${Math.floor(diffDays / 7)} semanas`;
+      if (diffDays < 365) return `Hace ${Math.floor(diffDays / 30)} meses`;
+      
+      // Para fechas muy antiguas, mostrar fecha formateada
+      return date.toLocaleDateString('es-ES', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric' 
+      });
+    };
+
     const truncateText = (text: string, maxLength: number) => {
       if (!text) return '';
       return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
@@ -265,6 +326,7 @@ export default defineComponent({
     return {
       getActivityStatus,
       formatLastLogin,
+      formatContractDate,
       truncateText,
       getStatusClass,
       getStatusIcon
