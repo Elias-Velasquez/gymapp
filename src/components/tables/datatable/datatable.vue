@@ -123,6 +123,62 @@
             </div>
           </template>
 
+          <!-- SLOT ESPECIAL: Solo para tablas de tipo 'sessions' -->
+          <template v-if="tableType === 'sessions'" #item-fecha="item">
+            <div class="text-start">
+              <div class="d-flex align-items-center mb-1">
+                <i class="ri-calendar-event-line me-2 text-primary"></i>
+                <span class="fw-medium">{{ item.fecha }}</span>
+              </div>
+              <!-- <div class="d-flex align-items-center">
+                <i class="ri-time-line me-2 text-muted"></i>
+                <small class="text-muted">{{ formatSessionTime(item.fecha) }}</small>
+              </div> -->
+            </div>
+          </template>
+
+          <template v-if="tableType === 'sessions'" #item-diaSemana="item">
+            <span class="badge bg-light text-dark">
+              <i class="ri-calendar-line me-1"></i>
+              {{ item.diaSemana }}
+            </span>
+          </template>
+
+          <template v-if="tableType === 'sessions'" #item-tiempoTranscurrido="item">
+            <small class="text-muted fw-medium">{{ item.tiempoTranscurrido }}</small>
+          </template>
+
+          <!-- SLOT ESPECIAL: Solo para tablas de tipo 'payments' -->
+          <template v-if="tableType === 'payments'" #item-fecha="item">
+            <div class="text-start">
+              <div class="d-flex align-items-center mb-1">
+                <i class="ri-calendar-event-line me-2 text-success"></i>
+                <span class="fw-medium">{{item.fecha}}</span>
+              </div>
+              <!-- <div class="d-flex align-items-center">
+                <i class="ri-time-line me-2 text-muted"></i>
+                <small class="text-muted">{{ formatSessionTime(item.fecha) }}</small>
+              </div> -->
+            </div>
+          </template>
+
+          <template v-if="tableType === 'payments'" #item-cantidad="item">
+            <div class="text-center">
+              <span class="fw-bold text-success fs-5">{{ item.cantidad }}</span>
+            </div>
+          </template>
+
+          <template v-if="tableType === 'payments'" #item-diaSemana="item">
+            <span class="badge bg-light text-dark">
+              <i class="ri-calendar-line me-1"></i>
+              {{ item.diaSemana }}
+            </span>
+          </template>
+
+          <template v-if="tableType === 'payments'" #item-tiempoTranscurrido="item">
+            <small class="text-muted fw-medium">{{ item.tiempoTranscurrido }}</small>
+          </template>
+
           <!-- SLOT GENÉRICO: Para cualquier campo 'status' -->
           <template #item-status="item">
             <span 
@@ -205,6 +261,11 @@ export default defineComponent({
     SimpleCardComponent 
   },
   props: {
+    tableType: {
+      type: String,
+      default: 'generic', 
+      validator: (value: string) => ['users', 'products', 'payments', 'sessions', 'generic'].includes(value)
+    },
     title: {
       type: String,
       required: true
@@ -323,13 +384,45 @@ export default defineComponent({
       return iconMap[status] || 'ri-question-line';
     };
 
+    const formatSessionDate = (dateString: string) => {
+      if (!dateString) return 'Sin fecha';
+      
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit', 
+          year: 'numeric'
+        });
+      } catch (error) {
+        return 'Fecha inválida';
+      }
+    };
+
+    const formatSessionTime = (dateString: string) => {
+      console.log(dateString, 'string')
+      if (!dateString) return '';
+      
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch (error) {
+        return '';
+      }
+    };
+
     return {
       getActivityStatus,
       formatLastLogin,
       formatContractDate,
       truncateText,
       getStatusClass,
-      getStatusIcon
+      getStatusIcon,
+      formatSessionDate, // NUEVO
+      formatSessionTime  
     };
   }
 });

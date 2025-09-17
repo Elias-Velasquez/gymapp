@@ -150,7 +150,7 @@
             </div>
 
             <!-- OBSERVACIONES -->
-            <div class="card elegant-info-card" v-if="userProfile?.observaciones">
+            <!-- <div class="card elegant-info-card" v-if="userProfile?.observaciones">
                 <div class="card-header elegant-card-header">
                     <div class="header-title">
                         <i class="ri-sticky-note-line"></i>
@@ -160,40 +160,254 @@
                 <div class="card-body">
                     <p class="observations-text">{{ userProfile.observaciones }}</p>
                 </div>
-            </div>
+            </div> -->
 
             <!-- INFORMACIÓN ADICIONAL -->
-            <div class="card elegant-info-card">
+        </div>
+        <div class="card elegant-info-card">
+            <div class="card-header elegant-card-header">
+                <div class="header-title">
+                    <i class="ri-information-line"></i>
+                    <span>Información del Sistema</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="ri-calendar-line"></i>
+                        Registro
+                    </div>
+                    <div class="detail-value">{{ formatDate(userProfile?.createdAt) }}</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="ri-time-line"></i>
+                        Último login
+                    </div>
+                    <div class="detail-value">{{ formatDateTime(userProfile?.last_login) }}</div>
+                </div>
+                
+                <div class="detail-row" v-if="mode === 'self' && userProfile?.roles?.[0]">
+                    <div class="detail-label">
+                        <i class="ri-shield-user-line"></i>
+                        Rol
+                    </div>
+                    <div class="detail-value">{{ userProfile.roles[0].name }}</div>
+                </div>
+            </div>
+        </div>
+
+
+
+            <div class="card elegant-info-card" v-if="userProfile?.sesiones && userProfile.sesiones.length > 0">
                 <div class="card-header elegant-card-header">
                     <div class="header-title">
-                        <i class="ri-information-line"></i>
-                        <span>Información del Sistema</span>
+                        <i class="ri-calendar-check-line"></i>
+                        <span>Últimas Sesiones</span>
+                    </div>
+                    <span class="badge bg-primary">{{ userProfile.sesiones.length }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="sessions-list">
+                        <div 
+                            v-for="(sesion, index) in getLastThreeItems(userProfile.sesiones)" 
+                            :key="sesion.id"
+                            class="session-item"
+                            :class="{ 'border-bottom': index < Math.min(userProfile.sesiones.length, 3) - 1 }"
+                        >
+                            <div class="session-info">
+                                <div class="session-icon">
+                                    <i class="ri-calendar-event-line"></i>
+                                </div>
+                                <div class="session-details">
+                                    <div class="session-date">{{ formatDate(sesion.fecha) }}</div>
+                                    <div class="session-time">{{ formatTime(sesion.fecha) }}</div>
+                                </div>
+                            </div>
+                            <div class="session-id">
+                                #{{ sesion.id }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div v-if="userProfile.sesiones.length > 1" class="show-more-sessions">
+                        <button 
+                            type="button" 
+                            class="btn btn-outline-primary btn-sm"
+                            @click="openSessionsModal"
+                            data-bs-toggle="modal"
+                            data-bs-target="#sessionsModal"
+                        >
+                            <i class="ri-eye-line me-1"></i>
+                            Ver todas las sesiones ({{ userProfile.sesiones.length }})
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÚLTIMOS PAGOS -->
+            <div class="card elegant-info-card" v-if="userProfile?.pagos && userProfile.pagos.length > 0">
+                <div class="card-header elegant-card-header">
+                    <div class="header-title">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <span>Últimos Pagos</span>
+                    </div>
+                    <span class="badge bg-success">{{ userProfile.pagos.length }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="payments-list">
+                        <div 
+                            v-for="(pago, index) in getLastThreeItems(userProfile.pagos)" 
+                            :key="pago.id"
+                            class="payment-item"
+                            :class="{ 'border-bottom': index < Math.min(userProfile.pagos.length, 3) - 1 }"
+                        >
+                            <div class="payment-info">
+                                <div class="payment-icon">
+                                    <i class="ri-secure-payment-line"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <div class="payment-date">{{ formatDate(pago.fecha) }}</div>
+                                    <div class="payment-time">{{ formatTime(pago.fecha) }}</div>
+                                </div>
+                            </div>
+                            <div class="payment-amount">
+                                <span class="amount">{{ formatCurrency(pago.cantidad) }}</span>
+                                <small class="payment-id">#{{ pago.id }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div v-if="userProfile.pagos.length > 1" class="show-more-payments">
+                        <button 
+                            type="button" 
+                            class="btn btn-outline-success btn-sm"
+                            @click="openPaymentsModal"
+                            data-bs-toggle="modal"
+                            data-bs-target="#paymentsModal"
+                        >
+                            <i class="ri-eye-line me-1"></i>
+                            Ver todos los pagos ({{ userProfile.pagos.length }})
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARDS DE PLACEHOLDER CUANDO NO HAY DATOS -->
+            <!-- Sin Sesiones -->
+            <div class="card elegant-info-card" v-if="!userProfile?.sesiones || userProfile.sesiones.length === 0">
+                <div class="card-header elegant-card-header">
+                    <div class="header-title">
+                        <i class="ri-calendar-check-line"></i>
+                        <span>Sesiones</span>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="detail-row">
-                        <div class="detail-label">
-                            <i class="ri-calendar-line"></i>
-                            Registro
-                        </div>
-                        <div class="detail-value">{{ formatDate(userProfile?.createdAt) }}</div>
+                    <div class="no-data">
+                        <i class="ri-calendar-close-line"></i>
+                        <p>Sin sesiones registradas</p>
+                        <small>Las sesiones aparecerán aquí cuando se registren</small>
                     </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label">
-                            <i class="ri-time-line"></i>
-                            Último login
-                        </div>
-                        <div class="detail-value">{{ formatDateTime(userProfile?.last_login) }}</div>
+                </div>
+            </div>
+
+            <!-- Sin Pagos -->
+            <div class="card elegant-info-card" v-if="!userProfile?.pagos || userProfile.pagos.length === 0">
+                <div class="card-header elegant-card-header">
+                    <div class="header-title">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <span>Pagos</span>
                     </div>
-                    
-                    <div class="detail-row" v-if="mode === 'self' && userProfile?.roles?.[0]">
-                        <div class="detail-label">
-                            <i class="ri-shield-user-line"></i>
-                            Rol
-                        </div>
-                        <div class="detail-value">{{ userProfile.roles[0].name }}</div>
+                </div>
+                <div class="card-body">
+                    <div class="no-data">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <p>Sin pagos registrados</p>
+                        <small>Los pagos aparecerán aquí cuando se registren</small>
                     </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="modal fade" id="sessionsModal" tabindex="-1" aria-labelledby="sessionsModalLabel" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content elegant-modal">
+                <!-- HEADER -->
+                <div class="modal-header elegant-header">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="ri-calendar-check-line"></i>
+                        </div>
+                        <div class="header-text">
+                            <h5 class="modal-title mb-0">Todas las Sesiones</h5>
+                            <small class="text-white-50">{{ userProfile?.nombre }} {{ userProfile?.apellidos }} - {{ userProfile?.sesiones?.length || 0 }} sesiones registradas</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body elegant-body p-0">
+                    <!-- Usar el componente DataTable reutilizable -->
+                    <DatatableVue
+                        :title="''"
+                        :headers="sessionsHeaders"
+                        :items="sessionsTableData"
+                        :tableType="'sessions'"
+                        :dataToPass="{}"
+                        @view="handleSessionView"
+                        @edit="handleSessionEdit"
+                        @delete="handleSessionDelete"
+                    />
+                </div>
+
+                <div class="modal-footer elegant-footer">
+                    <button type="button" class="btn elegant-btn-secondary" data-bs-dismiss="modal">
+                        <i class="ri-close-line me-2"></i>
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA VER TODOS LOS PAGOS -->
+    <div class="modal fade" id="paymentsModal" tabindex="-1" aria-labelledby="paymentsModalLabel" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content elegant-modal">
+                <!-- HEADER -->
+                <div class="modal-header elegant-header">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="ri-money-dollar-circle-line"></i>
+                        </div>
+                        <div class="header-text">
+                            <h5 class="modal-title mb-0">Todos los Pagos</h5>
+                            <small class="text-white-50">{{ userProfile?.nombre }} {{ userProfile?.apellidos }} - {{ userProfile?.pagos?.length || 0 }} pagos registrados</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body elegant-body p-0">
+                    <!-- Usar el componente DataTable reutilizable -->
+                    <DatatableVue
+                        :title="''"
+                        :headers="paymentsHeaders"
+                        :items="paymentsTableData"
+                        :tableType="'payments'"
+                        :dataToPass="{}"
+                        @view="handlePaymentView"
+                        @edit="handlePaymentEdit"
+                        @delete="handlePaymentDelete"
+                    />
+                </div>
+
+                <div class="modal-footer elegant-footer">
+                    <button type="button" class="btn elegant-btn-secondary" data-bs-dismiss="modal">
+                        <i class="ri-close-line me-2"></i>
+                        Cerrar
+                    </button>
                 </div>
             </div>
         </div>
@@ -364,6 +578,7 @@ import { useAuthStore } from '../../stores/auth.js';
 import { useUserStore } from '../../stores/users';
 import { Modal } from "bootstrap";
 import axios from "axios";
+import DatatableVue from '../tables/datatable/datatable.vue';
 
 // Importar SweetAlert2
 import Swal from 'sweetalert2';
@@ -371,7 +586,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 
 export default {
     components: {
-        PageHeader
+        PageHeader,
+        DatatableVue
     },
     data() {
         return {
@@ -383,7 +599,9 @@ export default {
                 peso: '',
                 altura: '',
                 last_login: '',
-                contrato: {}
+                contrato: {},
+                pagos:[],
+                sesiones: []
             },
             dataToPass: {
                 current: "Perfil",
@@ -399,7 +617,22 @@ export default {
                 sesiones: 1,
                 estadoContratoId: 1
             },
-            contractFormErrors: {}
+            contractFormErrors: {},
+            sessionsHeaders: [
+                { text: "Fecha y Hora", value: "fecha", sortable: true, width: 200 },
+                { text: "Día de la Semana", value: "diaSemana", sortable: false, width: 150 },
+                { text: "Hace", value: "tiempoTranscurrido", sortable: false, width: 120 },
+                { text: "Acciones", value: "actions", sortable: false, width: 120 }
+            ],
+
+            // Headers para la tabla de pagos
+            paymentsHeaders: [
+                { text: "Fecha y Hora", value: "fecha", sortable: true, width: 200 },
+                { text: "Cantidad", value: "cantidad", sortable: true, width: 120 },
+                { text: "Día de la Semana", value: "diaSemana", sortable: false, width: 150 },
+                { text: "Hace", value: "tiempoTranscurrido", sortable: false, width: 120 },
+                { text: "Acciones", value: "actions", sortable: false, width: 120 }
+            ]
         };
     },
     computed: {
@@ -408,6 +641,39 @@ export default {
         },
         userStore() {
             return useUserStore();
+        },
+        sessionsTableData() {
+        if (!this.userProfile?.sesiones) return [];
+        
+        return this.userProfile.sesiones
+            .slice()
+            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+            .map(sesion => ({
+                id: sesion.id,
+                fecha: this.formatDateTimeComplete(sesion.fecha),
+                diaSemana: this.getDayOfWeek(sesion.fecha),
+                tiempoTranscurrido: this.getTimeAgo(sesion.fecha),
+                // Datos originales para usar en acciones
+                originalData: sesion
+            }));
+        },
+
+        // Datos procesados para la tabla de pagos
+        paymentsTableData() {
+            if (!this.userProfile?.pagos) return [];
+            
+            return this.userProfile.pagos
+                .slice()
+                .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+                .map(pago => ({
+                    id: pago.id,
+                    fecha: this.formatDateTimeComplete(pago.fecha),
+                    cantidad: this.formatCurrency(pago.cantidad),
+                    diaSemana: this.getDayOfWeek(pago.fecha),
+                    tiempoTranscurrido: this.getTimeAgo(pago.fecha),
+                    // Datos originales para usar en acciones
+                    originalData: pago
+                }));
         }
     },
     async mounted() {
@@ -711,7 +977,143 @@ export default {
             } catch (error) {
                 return 'Fecha inválida';
             }
+        },
+        formatCurrency(amount) {
+            if (amount === null || amount === undefined) return '€0,00';
+            
+            try {
+                return new Intl.NumberFormat('es-ES', {
+                    style: 'currency',
+                    currency: 'EUR'
+                }).format(amount);
+            } catch (error) {
+                return `€${amount}`;
+            }
+        },
+        getLastThreeItems(array) {
+            if (!array || !Array.isArray(array)) return [];
+            
+            // Ordenar por fecha descendente (más reciente primero) y tomar los primeros 3
+            return array
+                .slice()
+                .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+                .slice(0, 3);
+        },
+        formatTime(dateString) {
+            if (!dateString) return '';
+            
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (error) {
+                return '';
+            }
+        },
+        openSessionsModal() {
+        console.log('Abriendo modal de sesiones');
+    },
+
+    openPaymentsModal() {
+        console.log('Abriendo modal de pagos');
+    },
+
+    // === MÉTODOS PARA FORMATEAR DATOS ===
+    formatDateTimeComplete(dateString) {
+        if (!dateString) return 'Sin fecha';
+        
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (error) {
+            return 'Fecha inválida';
         }
+    },
+
+    getDayOfWeek(dateString) {
+        if (!dateString) return '';
+        
+        try {
+            const date = new Date(dateString);
+            const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            return days[date.getDay()];
+        } catch (error) {
+            return '';
+        }
+    },
+
+    getTimeAgo(dateString) {
+        if (!dateString) return '';
+        
+        try {
+            const now = new Date();
+            const date = new Date(dateString);
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'Hace menos de 1 min';
+            if (diffInSeconds < 3600) return `Hace ${Math.floor(diffInSeconds / 60)} min`;
+            if (diffInSeconds < 86400) return `Hace ${Math.floor(diffInSeconds / 3600)} h`;
+            if (diffInSeconds < 2592000) return `Hace ${Math.floor(diffInSeconds / 86400)} días`;
+            if (diffInSeconds < 31536000) return `Hace ${Math.floor(diffInSeconds / 2592000)} meses`;
+            return `Hace ${Math.floor(diffInSeconds / 31536000)} años`;
+        } catch (error) {
+            return '';
+        }
+    },
+
+    // === MANEJADORES DE EVENTOS DE SESIONES ===
+    handleSessionView(sesion) {
+        console.log('Ver sesión:', sesion);
+        // Implementar lógica para ver detalles de la sesión
+        // Por ejemplo: mostrar un modal con más información
+        alert(`Ver detalles de la sesión #${sesion.id}\nFecha: ${sesion.fecha}`);
+    },
+
+    handleSessionEdit(sesion) {
+        console.log('Editar sesión:', sesion);
+        // Implementar lógica para editar la sesión
+        // Por ejemplo: redirigir a página de edición o abrir modal de edición
+        alert(`Editar sesión #${sesion.id}`);
+    },
+
+    handleSessionDelete(sesion) {
+        console.log('Eliminar sesión:', sesion);
+        // Implementar lógica para eliminar la sesión
+        if (confirm(`¿Estás seguro de que quieres eliminar la sesión #${sesion.id}?`)) {
+            // Llamar al API para eliminar
+            console.log('Sesión eliminada');
+        }
+    },
+
+    // === MANEJADORES DE EVENTOS DE PAGOS ===
+    handlePaymentView(pago) {
+        console.log('Ver pago:', pago);
+        // Implementar lógica para ver detalles del pago
+        alert(`Ver detalles del pago #${pago.id}\nCantidad: ${pago.cantidad}\nFecha: ${pago.fecha}`);
+    },
+
+    handlePaymentEdit(pago) {
+        console.log('Editar pago:', pago);
+        // Implementar lógica para editar el pago
+        alert(`Editar pago #${pago.id}`);
+    },
+
+    handlePaymentDelete(pago) {
+        console.log('Eliminar pago:', pago);
+        // Implementar lógica para eliminar el pago
+        if (confirm(`¿Estás seguro de que quieres eliminar el pago #${pago.id}?`)) {
+            // Llamar al API para eliminar
+            console.log('Pago eliminado');
+        }
+    }
     }
 };
 </script>
@@ -852,7 +1254,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 0;
-    padding: 2rem;
+    padding: 1.3rem;
     background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
@@ -1248,6 +1650,390 @@ export default {
     .elegant-btn-success {
         width: 100%;
         justify-content: center;
+    }
+}
+
+/* Estilos para las cards de Sesiones y Pagos */
+
+/* Lista de Sesiones */
+.sessions-list {
+    .session-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        
+        &.border-bottom {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            
+            .session-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 16px;
+            }
+            
+            .session-details {
+                .session-date {
+                    font-weight: 600;
+                    color: var(--bs-gray-800);
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+                
+                .session-time {
+                    color: var(--bs-gray-600);
+                    font-size: 12px;
+                }
+            }
+        }
+        
+        .session-id {
+            color: var(--bs-gray-500);
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--bs-gray-100);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+    }
+}
+
+/* Lista de Pagos */
+.payments-list {
+    .payment-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        
+        &.border-bottom {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            
+            .payment-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 16px;
+            }
+            
+            .payment-details {
+                .payment-date {
+                    font-weight: 600;
+                    color: var(--bs-gray-800);
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+                
+                .payment-time {
+                    color: var(--bs-gray-600);
+                    font-size: 12px;
+                }
+            }
+        }
+        
+        .payment-amount {
+            text-align: right;
+            
+            .amount {
+                display: block;
+                font-weight: 700;
+                color: #28a745;
+                font-size: 16px;
+                margin-bottom: 2px;
+            }
+            
+            .payment-id {
+                color: var(--bs-gray-500);
+                font-size: 11px;
+                background: var(--bs-gray-100);
+                padding: 2px 6px;
+                border-radius: 4px;
+            }
+        }
+    }
+}
+
+/* Indicadores de "mostrar más" */
+.show-more-sessions,
+.show-more-payments {
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    small {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+}
+
+/* Estado sin datos */
+.no-data {
+    text-align: center;
+    padding: 30px 20px;
+    
+    i {
+        font-size: 48px;
+        color: var(--bs-gray-400);
+        margin-bottom: 12px;
+        display: block;
+    }
+    
+    p {
+        font-weight: 600;
+        color: var(--bs-gray-600);
+        margin-bottom: 6px;
+        font-size: 16px;
+    }
+    
+    small {
+        color: var(--bs-gray-500);
+        font-size: 14px;
+    }
+}
+
+/* Badges en headers */
+.card-header .badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .session-item,
+    .payment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        
+        .session-id,
+        .payment-amount {
+            align-self: flex-end;
+        }
+    }
+    
+    .session-info,
+    .payment-info {
+        width: 100%;
+    }
+}
+
+.sessions-list {
+    .session-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        
+        &.border-bottom {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            
+            .session-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 16px;
+            }
+            
+            .session-details {
+                .session-date {
+                    font-weight: 600;
+                    color: var(--bs-gray-800);
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+                
+                .session-time {
+                    color: var(--bs-gray-600);
+                    font-size: 12px;
+                }
+            }
+        }
+        
+        .session-id {
+            color: var(--bs-gray-500);
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--bs-gray-100);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+    }
+}
+
+/* Lista de Pagos */
+.payments-list {
+    .payment-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        
+        &.border-bottom {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            
+            .payment-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 16px;
+            }
+            
+            .payment-details {
+                .payment-date {
+                    font-weight: 600;
+                    color: var(--bs-gray-800);
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+                
+                .payment-time {
+                    color: var(--bs-gray-600);
+                    font-size: 12px;
+                }
+            }
+        }
+        
+        .payment-amount {
+            text-align: right;
+            
+            .amount {
+                display: block;
+                font-weight: 700;
+                color: #28a745;
+                font-size: 16px;
+                margin-bottom: 2px;
+            }
+            
+            .payment-id {
+                color: var(--bs-gray-500);
+                font-size: 11px;
+                background: var(--bs-gray-100);
+                padding: 2px 6px;
+                border-radius: 4px;
+            }
+        }
+    }
+}
+
+/* Indicadores de "mostrar más" con botones */
+.show-more-sessions,
+.show-more-payments {
+    text-align: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .btn {
+        font-size: 12px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    }
+}
+
+/* Estado sin datos */
+.no-data {
+    text-align: center;
+    padding: 30px 20px;
+    
+    i {
+        font-size: 48px;
+        color: var(--bs-gray-400);
+        margin-bottom: 12px;
+        display: block;
+    }
+    
+    p {
+        font-weight: 600;
+        color: var(--bs-gray-600);
+        margin-bottom: 6px;
+        font-size: 16px;
+    }
+    
+    small {
+        color: var(--bs-gray-500);
+        font-size: 14px;
+    }
+}
+
+/* Badges en headers */
+.card-header .badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .session-item,
+    .payment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        
+        .session-id,
+        .payment-amount {
+            align-self: flex-end;
+        }
+    }
+    
+    .session-info,
+    .payment-info {
+        width: 100%;
     }
 }
 </style>
